@@ -1,10 +1,114 @@
+/**
+ * <a-entity kks-magic='preset:_default,options:{color:"#E91E61"}'></a-entity>
+ * 最基本的aframe粒子系统注册kks-magic组件
+ * 生成全局KKsMagic对象
+ * 可以使用KKsMagic.addPreset(name preset)方法添加新的预设，然后再使用
+ * preset格式{init,tick,update}三个函数
+ * preset.init函数必须返回一个THREE.Points对象
+ * 在函数中this指向el，比如this.kk.geometry指向threejs对象
+ * preset.tick函数通过修改ctx.kk.geometry.vertices数组所有点实现动画效果
+ * 在函数中可以访问this.data.options对象访问用户entity中设定的参数，注意parse处理
+ * 默认_default预设为400立方范围内降落的方形白色粒子
+ */
+
 (function () {
-    //所有函数都放在这里备用
-    window.KKsMagicMethods = {
-        _init: defaultInit,
-        _tick: defaultTick,
-        _update: function () {},
+    window.KKsMagic = {
+        /**
+         * 添加一个新的预设模版
+         * @param {string} name   预设模版的名称
+         * @param {object} preset {init,tick,update}三个函数
+         */
+        addPreset: function (name, preset) {
+            if (this.presets[name]) {
+                console.log('KKsMagic:addPreset:', name, 'has used.');
+                console.info('┖--You can log KKsMagic.presets to see all presets.');
+            } else {
+                this.presets[name] = preset;
+            };
+        },
+        presets: {},
     };
+
+    //-------------注册组件--------------
+    AFRAME.registerComponent('kks-magic', {
+        schema: {
+            preset: {
+                type: 'string',
+                default: '_default',
+            },
+            options: {
+                type: 'string',
+                parse: function (val) {
+                    var res = eval('(function(){return ' + val + '})()');
+                    return res;
+                },
+            },
+            init: {
+                type: 'string',
+                default: 'init',
+            },
+            tick: {
+                type: 'string',
+                default: 'tick',
+            },
+            update: {
+                type: 'string',
+                default: 'update',
+            },
+        },
+        init: function () {
+            var ctx = this;
+            if (!KKsMagic.presets[ctx.data.preset]) {
+                console.warn('KKsMagic:init:preset not found:', ctx.data.preset, ',set as _default.');
+                console.info('┖--You can log KKsMagic.presets to see all valid names.');
+                ctx.data.preset = '_default';
+            };
+
+            var points;
+            if (!KKsMagic.presets[ctx.data.preset].init) {
+                var geo = new THREE.Geometry();
+                var mat = new THREE.PointsMaterial();
+                points = new THREE.Points(geo, mat);
+            } else {
+                points = KKsMagic.presets[ctx.data.preset].init.call(ctx, arguments);
+            };
+
+            ctx.KK = this.kk = points;
+            if (points.constructor != THREE.Points) {
+                throw Error('KKsMagic:init:presets[' + ctx.data.preset + '].init must return a THREE.Points object.')
+            };
+            ctx.el.setObject3D('kks-magic', ctx.KK);
+        },
+        update: function () {
+            var ctx = this;
+            if (KKsMagic.presets[ctx.data.preset].update) {
+                KKsMagic.presets[ctx.data.preset].update.call(ctx, arguments);
+            };
+        },
+        tick: function () {
+            var ctx = this;
+            if (KKsMagic.presets[ctx.data.preset].tick) {
+                KKsMagic.presets[ctx.data.preset].tick.call(ctx, arguments);
+            };
+        },
+        remove: function () {
+            if (!this.KK) {
+                return;
+            }
+            this.el.removeObject3D('kks-magic');
+        },
+    });
+
+
+    //--------------添加默认default预设-----------------
+
+    KKsMagic.addPreset('_default', {
+        init: defaultInit,
+        tick: defaultTick,
+        update: undefined,
+        author: 'zhyuzh',
+        desc: 'A 400X400X400 snow box,not textured,with options.color,as default preset.',
+    });
 
     /**
      * 默认的初始化粒子函数,
@@ -13,6 +117,7 @@
      * @returns {object} THREE.Points
      */
     function defaultInit() {
+        var ctx = this;
         var count = 100;
         var geo = new THREE.Geometry();
 
@@ -25,27 +130,26 @@
         };
 
         var mat = new THREE.PointsMaterial({
-            color: 0xffffff,
+            color: ctx.data.options.color || '#FFFFFF',
             size: 4,
-            map: THREE.ImageUtils.loadTexture("./imgs/particle.png"),
+            //map: new THREE.TextureLoader().load("./imgs/particle.png"),
             blending: THREE.AdditiveBlending,
             transparent: true,
         });
 
         var kk = new THREE.Points(geo, mat);
-
         return kk;
     };
 
-
     /**
-     * 默认每次tick的函数
+     * 默认每次tick的函数,自动下落，落到最低返回顶部
      */
     function defaultTick() {
+        var ctx = this;
         var time = arguments[0][0];
         var deltaTime = arguments[0][1];
 
-        var verts = this.KK.geometry.vertices;
+        var verts = ctx.kk.geometry.vertices;
         for (var i = 0; i < verts.length; i++) {
             var vert = verts[i];
             if (vert.y < -200) {
@@ -53,47 +157,10 @@
             }
             vert.y = vert.y - (0.1 * deltaTime);
         }
-        this.KK.geometry.verticesNeedUpdate = true;
+        ctx.kk.geometry.verticesNeedUpdate = true;
     };
 
-
-    //注册组件
-    AFRAME.registerComponent('kks-magic', {
-        schema: {
-            init: {
-                type: 'string',
-                default: '_init',
-            },
-            tick: {
-                type: 'string',
-                default: '_tick',
-            },
-            update: {
-                type: 'string',
-                default: '_update',
-            },
-        },
-        init: function () {
-            this.KK = KKsMagicMethods[this.data.init].call(this, arguments);
-            this.el.setObject3D('kks-magic', this.KK);
-        },
-        update: function () {
-            KKsMagicMethods[this.data.update].call(this, arguments);
-        },
-        tick: function () {
-            KKsMagicMethods[this.data.tick].call(this, arguments);
-        },
-        remove: function () {
-            if (!this.KK) {
-                return;
-            }
-            this.el.removeObject3D('kks-magic');
-        },
-    });
 })();
-
-
-
 
 
 

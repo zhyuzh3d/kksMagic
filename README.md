@@ -1,2 +1,3 @@
-# fireworksKK
-fireworks from 10knet 
+# kksMagic
+Fireworks&more from 10knet. 
+Base on Threejs.
