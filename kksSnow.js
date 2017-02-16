@@ -1,5 +1,5 @@
 /**
- * 此snow预设仅供参考，实际与_default预设基本相同
+ * 此snow预设仅供参考，实际与default预设基本相同,但使用了THREE.Group
  * <a-entity kks-magic='preset:snow;options:{color:"#E91E61"}'></a-entity>
  * 必须实现preset_init,preset_tick,preset_update三个函数
  * ctx.kk指向aframe组件的threejs对象，比如ctx.kk.geometry指向
@@ -45,7 +45,10 @@
         });
 
         var kk = new THREE.Points(geo, mat);
-        return kk;
+        var grp = new THREE.Group();
+        grp.add(kk);
+
+        return grp;
     };
 
 
@@ -57,7 +60,7 @@
         var time = arguments[0][0];
         var deltaTime = arguments[0][1];
 
-        var verts = ctx.kk.geometry.vertices;
+        var verts = ctx.kk.children[0].geometry.vertices;
         for (var i = 0; i < verts.length; i++) {
             var vert = verts[i];
             if (vert.y < -200) {
@@ -65,6 +68,6 @@
             }
             vert.y = vert.y - (0.1 * deltaTime);
         }
-        ctx.kk.geometry.verticesNeedUpdate = true;
+        ctx.kk.children[0].geometry.verticesNeedUpdate = true;
     };
 })();

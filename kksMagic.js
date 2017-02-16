@@ -73,11 +73,11 @@
                 points = KKsMagic.presets[ctx.data.preset].init.call(ctx, arguments);
             };
 
-            ctx.KK = this.kk = points;
-            if (points.constructor != THREE.Points) {
-                throw Error('KKsMagic:init:presets[' + ctx.data.preset + '].init must return a THREE.Points object.')
+            ctx.kk = points;
+            if (points.constructor != THREE.Points && points.constructor != THREE.Group) {
+                throw Error('KKsMagic:init:presets[' + ctx.data.preset + '].init must return a THREE.Points or THREE.Group object.')
             };
-            ctx.el.setObject3D('kks-magic', ctx.KK);
+            ctx.el.setObject3D('kks-magic', ctx.kk);
         },
         update: function () {
             var ctx = this;
