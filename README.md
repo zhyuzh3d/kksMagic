@@ -1,5 +1,5 @@
 # kksMagic v0.1
-<small>小于1.0的测试版本请勿使用，仅供参考</small>
+小于1.0的测试版本请勿使用，仅供参考
 
 基于ThreeJs的A-frame粒子特效Entity对象插件
 包括飘雪、焰火以及更多内容
@@ -7,21 +7,21 @@
 Fireworks&more from 10knet.com; Base on Threejs.
 
 ---
-#####快速上手(基于v0.1)
+###快速上手(基于v0.1)
 
-1. 在html页面`<head>`中引用A-frame.js和kksMagic.js文件：
+####1. 在html页面`<head>`中引用A-frame.js和kksMagic.js文件：
 
     ```html
     <script src="./dist/lib/aframe.min.js"></script>
     <script src="./dist/kksMagic/kksMagic.js"></script>
     ```
     
-1. 引用需要使用的预设，比如烟花kksFireWorks:
+####1. 引用需要使用的预设，比如烟花kksFireWorks:
 
     ```html
     <script src="./dist/kksFireWorks/kksFireWorks.js"></script>
     ``` 
-1. 在`<body>`内的`<a-scene>`节点内添加`<a-ntity>`节点，指定熟悉kks-magic选项（options选项应参照每个预设的使用说明）:
+####1. 在`<body>`内的`<a-scene>`节点内添加`<a-ntity>`节点，指定熟悉kks-magic选项（options选项应参照每个预设的使用说明）:
     **
     ```html
     <a-scene>
@@ -30,17 +30,17 @@ Fireworks&more from 10knet.com; Base on Threejs.
     </a-scene>
     
     ```   
-1. 更多内容请参照项目的index.html文件内demo效果使用
+####1. 更多内容请参照项目的index.html文件内demo效果使用
 
 ---
 
-#####preset:snow(v0.1)
+###preset:snow(v0.1)
 
-示例:
+####示例:
 
 kks-magic='preset:snow;options:{color:"#ff00ff"}'
 
-说明:
+####说明:
 
 * color 雪花颜色，字符串16进制如"#FF0000"，或者0xFF0000
 
@@ -48,9 +48,9 @@ kks-magic='preset:snow;options:{color:"#ff00ff"}'
 
 
 ---
-#####版本历史
+###版本历史
 
-v0.1 / 170218
+####v0.1 / 170218
 
 整理项目结构，最终代码都放在dist文件夹。
 
