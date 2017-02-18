@@ -9,6 +9,12 @@
 
 
 (function () {
+    //获取预设所在路径
+    var js = document.scripts;
+    js = js[js.length - 1];
+    var path = js.src.substring(0, js.src.lastIndexOf("/") + 1);
+
+    //注册预设
     KKsMagic.addPreset('snow', {
         init: init,
         tick: tick,
@@ -39,7 +45,7 @@
         var mat = new THREE.PointsMaterial({
             color: ctx.data.options.color || '#FFFFFF',
             size: 4,
-            map: new THREE.TextureLoader().load("./imgs/particle.png"),
+            map: new THREE.TextureLoader().load(path + "imgs/dot-64.png"),
             blending: THREE.AdditiveBlending,
             transparent: true,
         });

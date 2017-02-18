@@ -3,14 +3,16 @@
 <head>
     <title>FireworksKK</title>
     <meta charset="utf-8">
-    <script src="./lib/jquery.min.js"></script>
-    <script src="./lib/aframe.min.js"></script>
-    <script src="./kksMagic.js"></script>
+    <script src="./dist/lib/jquery.min.js"></script>
+    <script src="./dist/lib/aframe.min.js"></script>
+    <script src="./dist/kksMagic/kksMagic.js"></script>
+    <script src="./dist/kksFireWorks/kksFireWorks.js"></script>
+    <script src="./dist/kksSnow/kksSnow.js"></script>
 </head>
 
 <body>
-        <script src="./kksFireWorks.js"></script>
     <a-scene>
+<!--        <a-entity position='-2 2 -15' kks-magic='preset:snow;options:{color:"#00FFFF"}'></a-entity>-->
         <a-entity position='-2 2 -15' kks-magic='preset:fireworks;options:{color:0x00FF00}'></a-entity>
         <a-sky color='#000'></a-sky>
     </a-scene>
