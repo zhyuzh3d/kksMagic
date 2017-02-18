@@ -14,64 +14,67 @@
     KKsMagic.addPreset('fireworks', {
         init: init,
         tick: tick,
-        update: update,
         author: 'zhyuzh',
         desc: 'A pretty fireworks!',
     });
 
-    var opt;
 
+    //初始化变量
+    var opt, geo, mat, points, time, gravity;
 
-    var mat = new THREE.PointsMaterial({
+    opt = {
+        count: 2000,
+        size: 3,
+        color: 0xFF8888,
+        acc: 0.75,
+        accRand: 0.2,
+        air: 0.005,
+        life: 500,
+        lifeRand: 1000,
+        g: new THREE.Vector3(0, -0.04, 0),
+        speed: new THREE.Vector3(0, 1.5, 0),
+    };
+
+    points = []; //所有粒子对象
+    time = 0; //粒子开始时间计时
+    gravity = new THREE.Vector3(0, opt.g, 0);
+
+    mat = new THREE.PointsMaterial({
         color: '#FF00FF',
-        size: 0.5,
+        size: opt.size,
         map: new THREE.TextureLoader().load(path + "/imgs/dot-64.png"),
         blending: THREE.AdditiveBlending,
-        alphaTest: 0.5,
         transparent: true,
+        depthTest: false,
     });
 
-    var geo;
+
+    //-------------base functions----------
 
     /**
-     * 默认的初始化粒子函数,
-     * 400立方的范围随机生成粒子
-     * 读取默认图片材质
+     * 默认的初始化粒子函数
      * @returns {object} THREE.Points
      */
     function init() {
         var ctx = this;
 
-        opt = {
-            count: 1,
-            acc: 1,
-            air: 0.005,
-            g: new THREE.Vector3(0, 0, 0),
-            life: 0.5,
-            speed: 0,
+        //生成粒子
+        var arr = [];
+        for (var i = 0; i < opt.count; i++) {
+            var p = {};
+            var pos = genBallPoint();
+            p.pos = pos.clone().multiplyScalar(0.5);
+            p.acc = pos.multiplyScalar(opt.acc + genRandom() * opt.accRand);
+            p.acc.add(opt.speed);
+            p.life = opt.life + genRandom() * opt.lifeRand;
+            points.push(p);
+            arr.push(p.pos);
         };
 
         geo = new THREE.Geometry();
-
-        for (var p = 0; p < opt.count; p++) {
-            var point = new THREE.Vector3(0, 0, 0);
-            //            point.acc = genRandomV3(0.8);
-            point.acc = genBallPoint();
-            var yfix = point.acc.y + opt.speed;
-            point.acc.setY(yfix);
-            point.acc = point.acc.multiplyScalar(opt.acc);
-
-            geo.vertices.push(point);
-        };
-
-
-
-
-        var kk = new THREE.Points(geo, mat);
-        //        var grp = new THREE.Group();
-        //        grp.add(kk);
-
-        return kk;
+        geo.vertices = arr;
+        geo.dynamic = true;
+        return new THREE.Points(geo, mat);
     };
 
 
@@ -82,115 +85,28 @@
         var ctx = this;
         var time = arguments[0][0];
         var deltaTime = arguments[0][1];
-        //        var geo = ctx.kk.children[0].geometry;
-        //        var geo = ctx.kk.geometry;
+        time += deltaTime;
 
-
-
-
-        //        //if (time < 2000) {
-        //            //            for (var i = 0; i < 10; i++) {
-        //            var point = new THREE.Vector3(0, 0, 0);
-        //            point.acc = genBallPoint();
-        //            point.acc = point.acc.multiplyScalar(opt.acc);
-        //            geo.vertices.push(point);
-        //            //            }
-        // };
-
-        //        console.log('>>>>', Math.log(time));
-        //        console.log('>>>>', Math.sqrt(time));
-
-
-        /*
-        var points = geo.vertices;
-        var newPoints = [];
-
+        //重新计算粒子位置属性
+        var arr = [];
         for (var i = 0; i < points.length; i++) {
             var p = points[i];
-            p.x += p.acc.x;
-            p.y += p.acc.y;
-            p.z += p.acc.z;
-
-            if (p.acc.length() > 0.001) {
-                var newp = p.clone();
-                newp.acc = points[i].acc.multiplyScalar(0.9);
-                newPoints.push(newp);
-            } else {};
-
-            //points[i].acc.add(opt.g);
-            //subAir(points[i].acc, opt.air);
+            if (p.life > 1) {
+                p.life -= deltaTime;
+                p.acc.add(opt.g);
+                p.pos.add(p.acc);
+                arr.push(p.pos);
+            }
         };
 
-        if (newPoints.length < 1) {
-            ctx.el.parentNode.removeChild(ctx.el);
-        } else {
-            geo.vertices = newPoints;
-        };
-
-        */
-
-        /*
-         */
-        //        var newgeo = new THREE.Geometry();
-        //        for (var i = 0; i < points.length; i++) {
-        //            newgeo.vertices.push(points[i]);
-        //        };
-        //        newgeo.dynamic = true;
-        //        newgeo.verticesNeedUpdate = true;
-        //        ctx.kk = grp;
-        //        console.log('>>',ctx.el);
-
-
-        //        var pnts = new THREE.Points(geo, mat);
-        //
-        //
-        //        //
-        //        var group = ctx.kk;
-        //        for (var i = group.children.length - 1; i >= 0; i--) {
-        //            group.remove(group.children[i]);
-        //        };
-        //        ctx.kk.add(pnts);
-        //
-        //        group.add(pnts);
-
-
-
-        //ctx.el.setObject3D('kks-magic', grp);
-        setPoints();
-
-
-        /*
-         */
-        geo.vertices = points;
-        geo.rotateX(0.02);
-        geo.dynamic = true;
-        geo.verticesNeedUpdate = true;
-        geo.sortParticles = true;
-
-
+        //刷新粒子物体
         var newgeo = new THREE.Geometry();
-        newgeo.vertices = points;
+        newgeo.vertices = arr;
         ctx.kk.geometry = newgeo;
-
-        //ctx.kk = new THREE.Points(geo, mat);
-        //ctx.el.setObject3D('kks-magic', new THREE.Points(geo, mat));
-
-        setPoints(ctx);
-
-
-        //        console.log('>>>tick---');
-
     };
 
 
-    function update() {
-        var ctx = this;
-
-        console.log('>update', arguments);
-    };
-
-
-    //------------functions----------
+    //------------ext functions----------
 
     /**
      * 生成球面坐标的函数
@@ -205,54 +121,8 @@
         return new THREE.Vector3(x, y, z);
     };
 
-    var points = [];
-    for (var i = 0; i < 5000; i++) {
-        var point = genBallPoint().multiplyScalar(4);
-        point.acc = genBallPoint();
-        point.acc = point.acc.multiplyScalar(1);
-        point.life = Math.random() * 50 + 50;
-        points.push(point);
-    };
-
-    function setPoints() {
-        var arr = [];
-
-
-
-        for (var i = 0; i < points.length; i++) {
-            var p = points[i];
-            p.life -= 1;
-            if (p.life > 1) {
-                arr.push(p);
-            };
-            p.x += Math.random() * 0.2;
-        };
-
-        if (arr.length < 1) {
-
-            //ctx.update();
-            /*
-            for (var i = 0; i < 2; i++) {
-
-                var point = genBallPoint().multiplyScalar(4);
-                point.acc = genBallPoint();
-                point.acc = point.acc.multiplyScalar(1);
-                point.life = Math.random() * 50 + 50;
-                arr.push(point);
-            };
-            */
-        };
-
-        points = arr;
-
-        geo.vertices = arr;
-
-    };
-
-
-
     /**
-     * 生成随机数字,正负值
+     * 生成随机数字,正负值,-1到+1
      * @returns {number} res
      */
     function genRandom() {

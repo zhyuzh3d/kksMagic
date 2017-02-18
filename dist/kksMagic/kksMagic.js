@@ -65,18 +65,22 @@
             };
 
             var points;
-            if (!KKsMagic.presets[ctx.data.preset].init) {
-                var geo = new THREE.Geometry();
-                var mat = new THREE.PointsMaterial();
-                points = new THREE.Points(geo, mat);
-            } else {
+            if (KKsMagic.presets[ctx.data.preset].init) {
                 points = KKsMagic.presets[ctx.data.preset].init.call(ctx, arguments);
+
+            };
+
+            if (points) {
+                if (points.constructor != THREE.Points && points.constructor != THREE.Group) {
+                    points = new THREE.Points(new THREE.Geometry(), new THREE.PointsMaterial());
+                    console.warn('KKsMagic:init:not return a THREE.Points/THREE.Group object:', ctx.data.preset, ',use a default THREE.Points.');
+                };
+            } else {
+                points = new THREE.Points(new THREE.Geometry(), new THREE.PointsMaterial());
+                console.warn('KKsMagic:init:not return a object:', ctx.data.preset, ',use a default THREE.Points..');
             };
 
             ctx.kk = points;
-            if (points.constructor != THREE.Points && points.constructor != THREE.Group) {
-                throw Error('KKsMagic:init:presets[' + ctx.data.preset + '].init must return a THREE.Points or THREE.Group object.')
-            };
             ctx.el.setObject3D('kks-magic', ctx.kk);
         },
         update: function () {
@@ -92,10 +96,26 @@
             };
         },
         remove: function () {
-            if (!this.KK) {
+            var ctx = this;
+            if (KKsMagic.presets[ctx.data.preset].remove) {
+                KKsMagic.presets[ctx.data.preset].remove.call(ctx, arguments);
+            };
+            if (!ctx.kk) {
                 return;
-            }
-            this.el.removeObject3D('kks-magic');
+            };
+            ctx.el.removeObject3D('kks-magic');
+        },
+        pause: function () {
+            var ctx = this;
+            if (KKsMagic.presets[ctx.data.preset].pause) {
+                KKsMagic.presets[ctx.data.preset].pause.call(ctx, arguments);
+            };
+        },
+        play: function () {
+            var ctx = this;
+            if (KKsMagic.presets[ctx.data.preset].play) {
+                KKsMagic.presets[ctx.data.preset].play.call(ctx, arguments);
+            };
         },
     });
 
