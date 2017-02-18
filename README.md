@@ -22,14 +22,11 @@ Fireworks&more from 10knet.com; Base on Threejs.
     <script src="./dist/kksFireWorks/kksFireWorks.js"></script>
     ``` 
 ####1. 在`<body>`内的`<a-scene>`节点内添加`<a-ntity>`节点，指定熟悉kks-magic选项（options选项应参照每个预设的使用说明）:
-    **
-    ```html
     <a-scene>
         <a-entity position='0 2 -15' kks-magic='preset:fireworks;options:{color:0x00FF00}'></a-entity>
         <a-sky color='#000'></a-sky><br>
     </a-scene>
     
-    ```   
 ####1. 更多内容请参照项目的index.html文件内demo效果使用
 
 ---
