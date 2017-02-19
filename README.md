@@ -1,4 +1,5 @@
-# kksMagic v0.1
+# kksMagic v0.12 
+###kksFireWork 0.2 / kksSnow 0.1
 小于1.0的测试版本请勿使用，仅供参考
 
 基于ThreeJs的A-frame粒子特效Entity对象插件
