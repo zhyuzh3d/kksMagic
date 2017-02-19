@@ -5,8 +5,8 @@
  * 可以使用KKsMagic.addPreset(name preset)方法添加新的预设，然后再使用
  * preset格式{init,tick,update}三个函数
  * preset.init函数必须返回一个THREE.Points对象
- * 在函数中this指向el，比如this.kk.geometry指向threejs对象
- * preset.tick函数通过修改ctx.kk.geometry.vertices数组所有点实现动画效果
+ * 在函数中this指向el，比如this.$kksMagic.geometry指向threejs对象
+ * preset.tick函数通过修改ctx.$kksMagic.geometry.vertices数组所有点实现动画效果
  * 在函数中可以访问this.data.options对象访问用户entity中设定的参数，注意parse处理
  * 默认_default预设为400立方范围内降落的方形白色粒子
  */
@@ -80,8 +80,8 @@
                 console.warn('KKsMagic:init:not return a object:', ctx.data.preset, ',use a default THREE.Points..');
             };
 
-            ctx.kk = points;
-            ctx.el.setObject3D('kks-magic', ctx.kk);
+            ctx.$kksMagic = points;
+            ctx.el.setObject3D('kks-magic', ctx.$kksMagic);
         },
         update: function () {
             var ctx = this;
@@ -100,7 +100,7 @@
             if (KKsMagic.presets[ctx.data.preset].remove) {
                 KKsMagic.presets[ctx.data.preset].remove.call(ctx, arguments);
             };
-            if (!ctx.kk) {
+            if (!ctx.$kksMagic) {
                 return;
             };
             ctx.el.removeObject3D('kks-magic');
@@ -169,7 +169,7 @@
         var time = arguments[0][0];
         var deltaTime = arguments[0][1];
 
-        var verts = ctx.kk.geometry.vertices;
+        var verts = ctx.$kksMagic.geometry.vertices;
         for (var i = 0; i < verts.length; i++) {
             var vert = verts[i];
             if (vert.y < -200) {
@@ -177,7 +177,7 @@
             }
             vert.y = vert.y - (0.1 * deltaTime);
         }
-        ctx.kk.geometry.verticesNeedUpdate = true;
+        ctx.$kksMagic.geometry.verticesNeedUpdate = true;
     };
 
 })();
