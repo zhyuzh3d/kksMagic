@@ -1,10 +1,11 @@
 /**
- * v0.3
+ * v0.5.0
  * Licence:Using this software, you have agreed to this,every fireworks is your blessing for kk.
  * KKsMagic焰火插件预设
  * options:{};
  */
 
+console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n————洛天依《干物女/WeiWei》\nThanks for use kks-Magic and kks-fireworks.');
 
 (function () {
     //获取预设所在路径
@@ -31,56 +32,78 @@
 
         //默认设置
         ctx.$kksOpt = {
-            useTrail: 0,
-            useBloom: 0,
-            eCount: 1000,
-            eSize: 3,
-            eColor: '#ff67ff',
-            eColors: ['#FF00FF','#FFFF00','#00FFFF'],
-            eTexture: path + "/imgs/dot-64.png",
-            eAcc: 0.75,
-            eAccRand: 0.1,
-            eLife: 500,
-            eLifeRand: 300,
-            eGravity: new THREE.Vector3(0, -0.04, 0),
-            eSpeed: new THREE.Vector3(0, 1.5, 0),
-            eHeight: 50,
-            tSize: 2,
-            tSpread: 0.1,
-            tLife: 500,
-            tOpacity: 0.6,
-            bCount: 200,
-            bCountRand: 100,
-            bSize: 2,
-            bColor: '#ae4fff',
-            bTexture: path + "/imgs/dot-64.png",
-            bAcc: 0.3,
-            bAccRand: 0.0,
-            bLife: 500,
-            bLifeRand: 200,
-            rCount: 1,
-            rSpeed: 2,
-            rSpread: 0.01,
-            rLife: 200,
-            rLifeRand: 100,
-            rSize: 3,
-            rColor: '#c7f6ff',
-            rTexture: path + "/imgs/dot-64.png",
+            rCount: 1, //发射器每帧喷发的粒子数量，推荐1～5
+            rSpeed: 2, //发射器向上飞行的速度，推荐1~5
+            rSpread: 0.01, //发射器粒子扩散范围，数值越大拖尾越宽，推荐0.01~0.05
+            rLife: 200, //发射器粒子的最大生命值,毫秒，值越大拖尾越长，推荐100~1000
+            rLifeRand: 100, //发射器粒子生命值的随机值，下同，推荐参照rLife设置
+            rSize: 3, //发射器粒子大小，推荐1～5
+            rColor: '#c7f6ff', //发射器粒子颜色，如果需要多种颜色请使用rColors，下同
+            rColors: ['#FF0000', '#dd1fff', '#ff6200'], //发射器粒子随机颜色
+            rTexture: path + "/imgs/dot-64.png", //发射器粒子的形状贴图
+            eCount: 10, //爆炸粒子数量，如果使用爆炸拖尾和绽放，请尽可能设置最小如5～20；否则推荐100~2000
+            eSize: 3, //爆炸粒子大小，推荐1～5
+            eColor: '#ff67ff', //爆炸粒子颜色
+            eColors: ['#ff52ff', '#ffff42', '#76ffff'], //爆炸粒子随机颜色
+            eTexture: path + "/imgs/dot-64.png", //爆炸粒子形状贴图
+            eAcc: 0.75, //爆炸粒子炸开的加速度，值越大炸爆炸圆越大，推荐0.5~2
+            eAccRand: 0.1, //随机值,值越大爆炸圆形越不清晰
+            eLife: 500, //爆炸粒子最大生命值，值越大爆炸圆越大
+            eLifeRand: 300, //随机值
+            eGravity: '0 -0.04 0', //重力值，会拉伸爆炸圆，同时影响爆炸、拖尾和绽放，不推荐设置
+            eSpeed: '0 1.5 0', //爆炸器自身速度，用于中和重力值，不推荐设置
+            eHeight: 50, //爆炸高度，发射器到达这个高度后触发爆炸
+            useTrail: 1, //是否使用爆炸拖尾
+            tCount: 5, //拖尾每帧产生粒子数量，推荐1～5
+            tSize: 2, //拖尾粒子大小
+            tSpread: 0.1, //拖尾扩散范围，值越大拖尾越宽,推荐0.05~0.3
+            tLife: 500, //拖尾粒子生命最大值
+            tOpacity: 0.6, //拖尾透明值。拖尾的颜色由炸开的粒子控制；不能单独设置
+            useBloom: 1, //是否使用绽放效果，绽放是爆炸开的粒子再次进行爆炸
+            bCount: 200, //每个绽放爆炸的粒子数量，推荐100～1000
+            bCountRand: 100, //随机值
+            bColors: undefined, //绽放粒子随机颜色；绽放粒子颜色由炸开粒子颜色控制，但也可使用随机色
+            bSize: 2, //绽放粒子的大小，推荐1～3
+            bTexture: path + "/imgs/dot-64.png", //绽放粒子形状贴图
+            bAcc: 0.5, //绽放粒子加速度
+            bAccRand: 0.0, //随机值
+            bLife: 500, //绽放粒子生命最大值
+            bLifeRand: 200, //随机值
         };
 
-        //合并用户设置
+        //合并用户设置，整理数据，以及数量限定
         ctx.$kksOpt = Object.assign(ctx.$kksOpt, ctx.data.options);
+
+        //整理数据
+        var gravityArr = ctx.$kksOpt.eGravity.split(' ');
+        ctx.$kksOpt.eGravity = new THREE.Vector3(Number(gravityArr[0]), Number(gravityArr[1]), Number(gravityArr[2]));
+
+        var espeedArr = ctx.$kksOpt.eSpeed.split(' ');
+        ctx.$kksOpt.eSpeed = new THREE.Vector3(Number(espeedArr[0]), Number(espeedArr[1]), Number(espeedArr[2]));
+
+        //数量最大限定
+        if (ctx.$kksOpt.eCount > 10000) ctx.$kksOpt.eCount = 10000;
+        if (ctx.$kksOpt.useTrail && ctx.$kksOpt.eCount > 100) ctx.$kksOpt.eCount = 100;
+        if (ctx.$kksOpt.useBloom && ctx.$kksOpt.bCount > 1000) ctx.$kksOpt.bCount = 1000;
 
         //生成发射材质
         var rMat = new THREE.PointsMaterial({
-            color: ctx.$kksOpt.rColor,
             size: ctx.$kksOpt.rSize,
             map: new THREE.TextureLoader().load(ctx.$kksOpt.rTexture),
             blending: THREE.AdditiveBlending,
             transparent: true,
             depthTest: false,
         });
-
+        if (ctx.$kksOpt.rColors) {
+            var carr = [];
+            ctx.$kksOpt.rColors.forEach(function (clr) {
+                carr.push(new THREE.Color(clr));
+            });
+            ctx.$kksOpt.rColors = carr;
+            rMat.vertexColors = THREE.VertexColors;
+        } else {
+            rMat.color = new THREE.Color(ctx.$kksOpt.rColor);
+        };
 
         //生成爆炸材质
         var eMat = new THREE.PointsMaterial({
@@ -98,7 +121,7 @@
             ctx.$kksOpt.eColors = carr;
             eMat.vertexColors = THREE.VertexColors;
         } else {
-            eMat.color = ctx.$kksOpt.eColor;
+            eMat.color = new THREE.Color(ctx.$kksOpt.eColor);
         };
 
         //生成基本数据
@@ -132,7 +155,6 @@
         //使用拖尾
         if (ctx.$kksOpt.useTrail) {
             ctx.tMat = new THREE.PointsMaterial({
-                color: ctx.$kksOpt.eColor,
                 size: ctx.$kksOpt.tSize,
                 map: new THREE.TextureLoader().load(ctx.$kksOpt.eTexture),
                 blending: THREE.AdditiveBlending,
@@ -140,6 +162,13 @@
                 transparent: true,
                 depthTest: false,
             });
+            //拖尾不能随机颜色，如果爆炸使用多种颜色，那么拖尾与爆炸颜色一致
+            if (ctx.$kksOpt.eColors) {
+                ctx.tMat.vertexColors = THREE.VertexColors;
+            } else {
+                ctx.tMat.color = new THREE.Color(ctx.$kksOpt.eColor);
+            };
+
             ctx.$kksTrail = new THREE.Points(new THREE.Geometry(), ctx.tMat);
             kksMagic.add(ctx.$kksTrail);
         };
@@ -147,13 +176,28 @@
         //使用绽放
         if (ctx.$kksOpt.useBloom) {
             ctx.bMat = new THREE.PointsMaterial({
-                color: ctx.$kksOpt.bColor,
                 size: ctx.$kksOpt.bSize,
                 map: new THREE.TextureLoader().load(ctx.$kksOpt.bTexture),
                 blending: THREE.AdditiveBlending,
                 transparent: true,
                 depthTest: false,
             });
+            //绽放不能直接指定固定颜色只能使用爆炸颜色（或随机颜色），绽放可以指定随机颜色
+            if (ctx.$kksOpt.bColors) {
+                var carr = [];
+                ctx.$kksOpt.bColors.forEach(function (clr) {
+                    carr.push(new THREE.Color(clr));
+                });
+                ctx.$kksOpt.bColors = carr;
+                ctx.bMat.vertexColors = THREE.VertexColors;
+            } else {
+                if (ctx.$kksOpt.eColors) {
+                    ctx.bMat.vertexColors = THREE.VertexColors;
+                } else {
+                    ctx.bMat.color = new THREE.Color(ctx.$kksOpt.eColor);
+                }
+            };
+
             ctx.$kksBloom = new THREE.Points(new THREE.Geometry(), ctx.bMat);
             kksMagic.add(ctx.$kksBloom);
         };
@@ -203,8 +247,11 @@
             bloomTick.call(ctx, deltaTime);
         };
 
+        //烟花完毕后将整个元素移除
+        if (kksData.level > 0 && kksData.tPoints.length < 1 && kksData.rPoints.length < 1 && kksData.tPoints.length < 1 && kksData.bPoints.length < 1) {
+            ctx.el.parentNode.removeChild(ctx.el);
+        };
     };
-
     //------------ext functions----------
 
     /**
@@ -217,11 +264,20 @@
         var kksOpt = ctx.$kksOpt;
 
         for (var i = 0; i < kksData.ePoints.length; i++) {
-            var p = {};
-            p.pos = kksData.ePoints[i].pos.clone();
-            p.acc = genRandomV3().multiplyScalar(kksOpt.tSpread);
-            p.life = kksOpt.tLife;
-            kksData.tPoints.push(p);
+            for (var n = 0; n < kksOpt.tCount; n++) {
+                var p = {};
+                p.pos = kksData.ePoints[i].pos.clone();
+                p.acc = genRandomV3().multiplyScalar(kksOpt.tSpread);
+                p.life = kksOpt.tLife;
+                kksData.tPoints.push(p);
+
+                //处理多种颜色
+                if (kksOpt.eColors) {
+                    var clr = kksOpt.eColors[i % kksOpt.eColors.length];
+                    p.clr = clr;
+                    ctx.$kksData.tColors.push(clr);
+                };
+            };
         };
     };
 
@@ -236,6 +292,7 @@
 
         var parr = [];
         var varr = [];
+        var carr = [];
         for (var i = 0; i < kksData.tPoints.length; i++) {
             var p = kksData.tPoints[i];
             p.life -= deltaTime;
@@ -245,13 +302,15 @@
                 p.pos = p.pos.add(kksOpt.eGravity);
                 parr.push(p);
                 varr.push(p.pos);
+                if (kksOpt.rColors) carr.push(p.clr);
             };
         };
         kksData.tPoints = parr;
-        var newgeo = new THREE.Geometry();
+        var newGeo = new THREE.Geometry();
+        newGeo.vertices = varr;
+        if (kksOpt.eColors) newGeo.colors = carr;
 
-        newgeo.vertices = varr;
-        ctx.$kksTrail.geometry = newgeo;
+        ctx.$kksTrail.geometry = newGeo;
     };
 
 
@@ -266,8 +325,9 @@
 
         kksData.height += kksOpt.rSpeed;
         ctx.$kksRocket.position.y = kksData.height;
-        var rParr = [];
-        var rVarr = [];
+        var parr = [];
+        var varr = [];
+        var carr = [];
         for (var i = 0; i < kksData.rPoints.length; i++) {
             var p = kksData.rPoints[i];
             p.life -= deltaTime;
@@ -275,15 +335,17 @@
                 //重新计算粒子位置
                 p.pos = p.pos.add(p.acc);
                 p.pos = p.pos.add(kksOpt.eGravity);
-                rParr.push(p);
-                rVarr.push(p.pos);
+                parr.push(p);
+                varr.push(p.pos);
+                if (kksOpt.rColors) carr.push(p.clr);
             };
         };
-        kksData.rPoints = rParr;
-        var rGeo = new THREE.Geometry();
+        kksData.rPoints = parr;
+        var newGeo = new THREE.Geometry();
+        newGeo.vertices = varr;
+        if (kksOpt.rColors) newGeo.colors = carr;
 
-        rGeo.vertices = rVarr;
-        ctx.$kksRocket.geometry = rGeo;
+        ctx.$kksRocket.geometry = newGeo;
     };
 
     /**
@@ -340,8 +402,19 @@
             p.pos.add(particle.pos);
             p.acc = pos.multiplyScalar(kksOpt.bAcc + genRandom() * kksOpt.bAccRand);
             p.life = kksOpt.bLife + genRandom() * kksOpt.bLifeRand;
-            p.level = 1;
             kksData.bPoints.push(p);
+
+            //处理多种颜色
+            if (kksOpt.bColors) {
+                //绽放随机颜色
+                var clr = kksOpt.bColors[i % kksOpt.bColors.length];
+                p.clr = clr;
+                ctx.$kksData.bColors.push(clr);
+            } else if (kksOpt.eColors) {
+                //绽放爆炸粒子的颜色
+                p.clr = particle.clr;
+                ctx.$kksData.bColors.push(p.clr);
+            };
         };
     };
 
@@ -356,6 +429,7 @@
 
         var parr = [];
         var varr = [];
+        var carr = [];
         for (var i = 0; i < kksData.bPoints.length; i++) {
             var p = kksData.bPoints[i];
             p.life -= deltaTime;
@@ -363,6 +437,7 @@
                 p.pos.add(p.acc);
                 parr.push(p);
                 varr.push(p.pos);
+                if (kksOpt.bColors || kksOpt.eColors) carr.push(p.clr);
             };
         };
         kksData.bPoints = parr;
@@ -370,6 +445,8 @@
         //刷新粒子物体
         var newGeo = new THREE.Geometry();
         newGeo.vertices = varr;
+        if (kksOpt.bColors || kksOpt.eColors) newGeo.colors = carr;
+
         ctx.$kksBloom.geometry = newGeo;
     };
 
@@ -393,6 +470,18 @@
 
             p.life = kksOpt.rLife + genRandom() * kksOpt.rLifeRand;
             kksData.rPoints.push(p);
+
+            //处理多种颜色
+            if (kksOpt.rColors) {
+                var clr;
+                if (kksOpt.rCount < kksOpt.rColors.length) {
+                    clr = kksOpt.rColors[Math.floor(Math.random() * kksOpt.rColors.length)];
+                } else {
+                    clr = kksOpt.rColors[i % kksOpt.rColors.length];
+                };
+                p.clr = clr;
+                ctx.$kksData.rColors.push(clr);
+            };
         };
     };
 
