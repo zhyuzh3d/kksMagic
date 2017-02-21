@@ -1,24 +1,24 @@
 {
-  "name": "kks-magic",
-  "version": "0.1.3",
-  "description": "a-frame particles entity plugin.",
-  "main": "./dist/kksMagic/kksMagic.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/zhyuzh3d/kksMagic.git"
-  },
-  "keywords": [
+    "name": "kks-magic",
+    "version": "0.12.05",
+    "description": "a-frame particles entity plugin.",
+    "main": "./dist/kksMagic/kksMagic.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/zhyuzh3d/kksMagic.git"
+    },
+    "keywords": [
     "a-frame",
     "threejs",
     "particle"
   ],
-  "author": "zhyuzh",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/zhyuzh3d/kksMagic/issues"
-  },
-  "homepage": "https://github.com/zhyuzh3d/kksMagic#readme"
+    "author": "zhyuzh",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/zhyuzh3d/kksMagic/issues"
+    },
+    "homepage": "https://github.com/zhyuzh3d/kksMagic#readme"
 }

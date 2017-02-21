@@ -1,5 +1,5 @@
-# kksMagic v0.12 
-###kksFireWork 0.5.0 / kksSnow 0.1
+# kksMagic v0.12.05 
+###kksFireWork 0.5.0 / kksSnow 0.1.0
 小于1.0的测试版本请勿使用，仅供参考
 
 基于ThreeJs的A-frame粒子特效Entity对象插件
@@ -108,6 +108,16 @@ kks-magic='preset:snow;options:{color:"#ff00ff"}'
 
 ---
 ###版本历史
+
+####kksFireWorks v0.5.0 / 170221
+
+增加了爆炸拖尾效果
+
+增加了二次爆炸（绽放）效果
+
+增加了随机颜色功能
+
+增加了粒子完结之后自动清除自身Entity的功能
 
 ####kksFireWorks v0.2 / 170219
 
