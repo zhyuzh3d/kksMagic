@@ -19,7 +19,7 @@ Fireworks&more from 10knet.com; Base on Threejs.
 
     <script src="./dist/kksFireWorks/kksFireWorks.js"></script>
     
-####3.在`<body>`内的`<a-scene>`节点内添加`<a-ntity>`节点，指定熟悉kks-magic选项（options选项应参照每个预设的使用说明）:
+####3.在`<body>`内的`<a-scene>`节点内添加`<a-entity>`节点，指定熟悉kks-magic选项（options选项应参照每个预设的使用说明）:
 
 
     <a-scene>
