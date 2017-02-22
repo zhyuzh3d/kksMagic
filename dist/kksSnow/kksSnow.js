@@ -18,7 +18,6 @@
     KKsMagic.addPreset('snow', {
         init: init,
         tick: tick,
-        update: undefined,
         author: 'zhyuzh',
         desc: 'A 400X400X400 snow box,not textured,with options.color,as default preset.',
     });
@@ -32,63 +31,26 @@
     function init() {
         var ctx = this;
 
-        ctx.$kksOpt = {
-            count: 20, //每秒产生雪花数量，推荐60～100
-            size: 0.5, //雪花大小，不推荐修改
-            gravity: '0 0 0', //重力值，每秒向下移动数值
-            color: '#FFFFFF', //雪花的颜色，不推荐修改
-            colors: undefined, //随机颜色，数组，将覆盖color选项。不推荐使用
-            textrue: path + "imgs/dot-64.png", //雪花的形状图片，不推荐修改
-            height: 10, //雪花生成的高度，不推荐修改
-            low: -20, //雪花消失的高度，不推荐修改
-            range: 10, //飘雪的范围，范围越大需要生成越多的雪花
-            pos: '0 0 -10', //飘雪范围的中心，不推荐修改
-        };
-
-        //合并用户设置，整理数据，以及数量限定
-        ctx.$kksOpt = Object.assign(ctx.$kksOpt, ctx.data.options);
-
-        //数量最大限定
-        if (ctx.$kksOpt.count > 500) ctx.$kksOpt.eCount = 500;
-
-        //整理数据
-        var gravityArr = ctx.$kksOpt.gravity.split(' ');
-        ctx.$kksOpt.gravity = new THREE.Vector3(Number(gravityArr[0]), Number(gravityArr[1]), Number(gravityArr[2]));
-        var posArr = ctx.$kksOpt.pos.split(' ');
-        ctx.$kksOpt.pos = new THREE.Vector3(Number(posArr[0]), Number(posArr[1]), Number(posArr[2]));
-
-        //生成材质
-        var mat = new THREE.PointsMaterial({
-            size: ctx.$kksOpt.size,
-            map: new THREE.TextureLoader().load(ctx.$kksOpt.textrue),
-            blending: THREE.AdditiveBlending,
-            transparent: true,
-            depthTest: false,
-        });
-
-        //处理随机颜色
-        if (ctx.$kksOpt.colors) {
-            var carr = [];
-            ctx.$kksOpt.colors.forEach(function (clr) {
-                carr.push(new THREE.Color(clr));
-            });
-            ctx.$kksOpt.colors = carr;
-            rMat.vertexColors = THREE.VertexColors;
-        } else {
-            mat.color = new THREE.Color(ctx.$kksOpt.color);
-        };
-
         //生成基本数据
         ctx.$kksData = {
             points: [],
             colors: [],
-            mat: mat,
         };
 
+        genOpt.call(ctx);
+
         //生成Object3D对象
-        ctx.$kksSnow = new THREE.Points(new THREE.Geometry(), mat);
+        ctx.$kksSnow = new THREE.Points(new THREE.Geometry(), ctx.$kksData.mat);
         var kksMagic = new THREE.Group();
         kksMagic.add(ctx.$kksSnow);
+
+        //添加更新监听
+        ctx.el.addEventListener('kksUpdate', function (evt) {
+            ctx.data.options = evt.detail || {};
+            genOpt.call(ctx);
+            ctx.$kksSnow.material = ctx.$kksData.mat;
+        });
+
         return kksMagic;
     };
 
@@ -106,6 +68,63 @@
     };
 
 
+    //---------------functions--------------
+
+    /**
+     * 动态生成设置选项
+     */
+    function genOpt() {
+        var ctx = this;
+        ctx.$kksOpt = {
+            count: 20, //每秒产生雪花数量，推荐60～100
+            size: 1, //雪花大小，不推荐修改
+            speed: 5, //每秒向下移动数值
+            color: '#FFFFFF', //雪花的颜色，不推荐修改
+            colors: undefined, //随机颜色，数组，将覆盖color选项。不推荐使用
+            opacity: 0.66, //雪花透明度，推荐0.1～1
+            textrue: path + "imgs/dot-64.png", //雪花的形状图片，不推荐修改
+            height: 50, //雪花生成的高度，不推荐修改
+            low: -20, //雪花消失的高度，不推荐修改
+            range: 100, //飘雪的范围，范围越大需要生成越多的雪花
+            pos: '0 0 0', //飘雪范围的中心，不推荐修改
+        };
+
+        //合并用户设置，整理数据，以及数量限定
+        ctx.$kksOpt = Object.assign(ctx.$kksOpt, ctx.data.options);
+
+        //数量最大限定
+        if (ctx.$kksOpt.count > 500) ctx.$kksOpt.eCount = 500;
+
+        //整理数据
+        var posArr = ctx.$kksOpt.pos.split(' ');
+        ctx.$kksOpt.pos = new THREE.Vector3(Number(posArr[0]), Number(posArr[1]), Number(posArr[2]));
+
+        //生成材质
+        var mat = new THREE.PointsMaterial({
+            size: ctx.$kksOpt.size,
+            map: new THREE.TextureLoader().load(ctx.$kksOpt.textrue),
+            blending: THREE.AdditiveBlending,
+            opacity: ctx.$kksOpt.opacity,
+            transparent: true,
+            depthTest: false,
+        });
+
+        //处理随机颜色
+        if (ctx.$kksOpt.colors) {
+            var carr = [];
+            ctx.$kksOpt.colors.forEach(function (clr) {
+                carr.push(new THREE.Color(clr));
+            });
+            ctx.$kksOpt.colors = carr;
+            mat.vertexColors = THREE.VertexColors;
+        } else {
+            mat.color = new THREE.Color(ctx.$kksOpt.color);
+        };
+
+        ctx.$kksData.mat = mat;
+    };
+
+
     /**
      * 生成雪花,将新的雪花points添加到points队列
      */
@@ -118,17 +137,18 @@
 
         for (var i = 0; i < n; i++) {
             var p = {};
-            var angle = Math.random() * 3.14;
-            var rangeRand = Math.random() * kksOpt.range;
-            var px = kksOpt.pos.x + rangeRand * Math.sin(angle);
-            var pz = -1*(kksOpt.pos.z + rangeRand * Math.cos(angle));
-            if (Math.random() > 0.5) px *= -1;
-            p.pos = new THREE.Vector3(px, kksOpt.height, pz);
 
+            var x = kksOpt.pos.x + Math.random() * kksOpt.range - kksOpt.range / 2;
+            var z = kksOpt.pos.z + Math.random() * kksOpt.range - kksOpt.range / 2;
+            p.pos = new THREE.Vector3(x, kksOpt.height + kksOpt.pos.y, z);
+
+            //为了避免动态调整找不到clr，无论是否开启colors都指定clr参数
             if (kksOpt.colors) {
                 var clr = kksOpt.colors[Math.floor(Math.random() * kksOpt.colors.length)];
                 p.clr = clr;
                 kksData.colors.push(clr);
+            } else {
+                p.clr = kksData.mat.color;
             };
 
             kksData.points.push(p);
@@ -153,8 +173,7 @@
         for (var i = offset; i < kksData.points.length; i++) {
             var p = kksData.points[i];
             if (p.pos.y >= kksOpt.low) {
-                //p.pos.add(kksOpt.gravity.multiplyScalar(deltaTime / 1000));
-                //                p.pos.setY(p.pos.y -= 0.1);
+                p.pos.setY(p.pos.y -= kksOpt.speed * deltaTime / 1000);
                 parr.push(p);
                 varr.push(p.pos);
                 if (kksOpt.colors) carr.push(p.clr);
