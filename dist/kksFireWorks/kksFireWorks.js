@@ -1,5 +1,5 @@
 /**
- * v0.5.2
+ * v0.5.5
  * Licence:Using this software, you have agreed to this,every fireworks is your blessing for kk.
  * KKsMagic焰火插件预设
  */
@@ -31,45 +31,45 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
 
         //默认设置
         ctx.$kksOpt = {
-            rMaxCount:1000,//发射粒子最大数量，超过这个值的粒子被忽略
-            rCount: 1, //发射器每帧喷发的粒子数量，推荐1～5
-            rSpeed: 2, //发射器向上飞行的速度，推荐1~5
-            rSpread: 0.01, //发射器粒子扩散范围，数值越大拖尾越宽，推荐0.01~0.05
+            rMaxCount: 1000, //发射粒子最大数量，超过这个值的粒子被忽略
+            rCount: 300, //发射器每帧每秒喷射的粒子数量，推荐50～200
+            rSpeed: 40, //发射器每秒向上飞行的速度，推荐10~50
+            rSpread: 0.2, //发射器粒子扩散范围，数值越大拖尾越宽，推荐0.01~0.05
             rLife: 200, //发射器粒子的最大生命值,毫秒，值越大拖尾越长，推荐100~1000
             rLifeRand: 100, //发射器粒子生命值的随机值，下同，推荐参照rLife设置
             rSize: 3, //发射器粒子大小，推荐1～5
             rColor: '#c7f6ff', //发射器粒子颜色，如果需要多种颜色请使用rColors，下同
             rColors: ['#FF0000', '#dd1fff', '#ff6200'], //发射器粒子随机颜色
             rTexture: path + "/imgs/dot-64.png", //发射器粒子的形状贴图
-            eMaxCount:2000,//爆炸粒子最大数量，超过这个值的粒子被忽略
+            eMaxCount: 2000, //爆炸粒子最大数量，超过这个值的粒子被忽略
             eCount: 10, //爆炸粒子数量，如果使用爆炸拖尾和绽放，请尽可能设置最小如5～20；否则推荐100~2000
             eSize: 3, //爆炸粒子大小，推荐1～5
             eColor: '#ff67ff', //爆炸粒子颜色
             eColors: ['#ff52ff', '#ffff42', '#76ffff'], //爆炸粒子随机颜色
             eTexture: path + "/imgs/dot-64.png", //爆炸粒子形状贴图
-            eAcc: 0.75, //爆炸粒子炸开的加速度，值越大炸爆炸圆越大，推荐0.5~2
-            eAccRand: 0.1, //随机值,值越大爆炸圆形越不清晰
-            eLife: 500, //爆炸粒子最大生命值，值越大爆炸圆越大
-            eLifeRand: 300, //随机值
-            eGravity: '0 -0.04 0', //重力值，会拉伸爆炸圆，同时影响爆炸、拖尾和绽放，不推荐设置
-            eSpeed: '0 1.5 0', //爆炸器自身速度，用于中和重力值，不推荐设置
-            eHeight: 50, //爆炸高度，发射器到达这个高度后触发爆炸
+            eAcc: 70, //爆炸粒子炸开的加速度，值越大炸爆炸圆越大，推荐50~100
+            eAccRand: 10, //随机值,值越大爆炸圆形越不清晰
+            eLife: 400, //爆炸粒子最大生命值，值越大爆炸圆越大
+            eLifeRand: 100, //随机值
+            eGravity: '0 -100 0', //重力值，会拉伸爆炸圆，同时影响爆炸、拖尾和绽放，不推荐设置
+            eSpeed: '0 10 0', //爆炸器自身速度，用于中和重力值，不推荐设置
+            eHeight: 80, //爆炸高度，发射器到达这个高度后触发爆炸
             useTrail: 1, //是否使用爆炸拖尾
-            tMaxCount:2000,//拖尾粒子最大数量，超过这个值的粒子被忽略
-            tCount: 5, //拖尾每帧产生粒子数量，推荐1～5
+            tMaxCount: 2000, //拖尾粒子最大数量，超过这个值的粒子被忽略
+            tCount: 120, //拖尾每秒产生粒子数量，推荐50～200
             tSize: 2, //拖尾粒子大小
-            tSpread: 0.1, //拖尾扩散范围，值越大拖尾越宽,推荐0.05~0.3
+            tSpread: 0.2, //拖尾扩散范围，值越大拖尾越宽,推荐0.05~0.3
             tLife: 500, //拖尾粒子生命最大值
             tOpacity: 0.6, //拖尾透明值。拖尾的颜色由炸开的粒子控制；不能单独设置
             useBloom: 1, //是否使用绽放效果，绽放是爆炸开的粒子再次进行爆炸
-            bMaxCount:5000,//绽放粒子最大数量，超过这个值的粒子被忽略
+            bMaxCount: 5000, //绽放粒子最大数量，超过这个值的粒子被忽略
             bCount: 200, //每个绽放爆炸的粒子数量，推荐100～1000
             bCountRand: 100, //随机值
             bColors: undefined, //绽放粒子随机颜色；绽放粒子颜色由炸开粒子颜色控制，但也可使用随机色
             bSize: 2, //绽放粒子的大小，推荐1～3
             bTexture: path + "/imgs/dot-64.png", //绽放粒子形状贴图
-            bAcc: 0.5, //绽放粒子加速度
-            bAccRand: 0.0, //随机值
+            bAcc: 30, //绽放粒子每秒加速度,10~50
+            bAccRand: 1, //随机值
             bLife: 500, //绽放粒子生命最大值
             bLifeRand: 200, //随机值
         };
@@ -146,6 +146,7 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
             },
             rMat: rMat,
             eMat: eMat,
+            time: 0,
         };
 
         //生成Object3D对象
@@ -218,12 +219,12 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
         var kksOpt = ctx.$kksOpt;
 
         var deltaTime = arguments[0][1];
-        time += deltaTime;
+        kksData.time += deltaTime;
 
         if (kksData.height < ctx.$kksOpt.eHeight) {
             //生成发射粒子
             kksData.level = kksData.levels.rocket;
-            genRocket.call(ctx);
+            genRocket.call(ctx, deltaTime);
         } else {
             //生成爆炸粒子
             if (kksData.level < kksData.levels.explore) {
@@ -231,7 +232,7 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
                 kksData.level = kksData.levels.explore;
             };
             //爆炸阶段总是生成拖尾粒子
-            if (kksOpt.useTrail) genTrails.call(ctx);
+            if (kksOpt.useTrail) genTrails.call(ctx, deltaTime);
         };
 
         //总是清理和重新计算发射粒子
@@ -261,13 +262,16 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
      * 为每个爆炸粒子产生的拖尾效果，最大拖尾数量100
      * 每tick为每个爆照粒子产生1个拖尾
      */
-    function genTrails() {
+    function genTrails(deltaTime) {
         var ctx = this;
         var kksData = ctx.$kksData;
         var kksOpt = ctx.$kksOpt;
 
+        var timeUnit = kksData.time == 0 ? 0.16 : deltaTime / 1000;
+        var count = Math.ceil(kksOpt.tCount * timeUnit);
+
         for (var i = 0; i < kksData.ePoints.length; i++) {
-            for (var n = 0; n < kksOpt.tCount; n++) {
+            for (var n = 0; n < count; n++) {
                 var p = {};
                 p.pos = kksData.ePoints[i].pos.clone();
                 p.acc = genRandomV3().multiplyScalar(kksOpt.tSpread);
@@ -292,6 +296,7 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
         var ctx = this;
         var kksData = ctx.$kksData;
         var kksOpt = ctx.$kksOpt;
+        var timeUnit = kksData.time == 0 ? 0.16 : deltaTime / 1000;
 
         var parr = [];
         var varr = [];
@@ -306,7 +311,7 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
             if (p.life > 0) {
                 //重新计算粒子位置
                 p.pos = p.pos.add(p.acc);
-                p.pos = p.pos.add(kksOpt.eGravity);
+                p.pos = p.pos.add(kksOpt.eGravity.multiplyScalar(timeUnit));
                 parr.push(p);
                 varr.push(p.pos);
                 if (kksOpt.rColors) carr.push(p.clr);
@@ -330,7 +335,9 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
         var kksData = ctx.$kksData;
         var kksOpt = ctx.$kksOpt;
 
-        kksData.height += kksOpt.rSpeed;
+        var timeUnit = kksData.time == 0 ? 0.16 : deltaTime / 1000;
+
+        kksData.height += kksOpt.rSpeed * timeUnit;
         ctx.$kksRocket.position.y = kksData.height;
         var parr = [];
         var varr = [];
@@ -345,7 +352,7 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
             if (p.life > 0) {
                 //重新计算粒子位置
                 p.pos = p.pos.add(p.acc);
-                p.pos = p.pos.add(kksOpt.eGravity);
+                p.pos = p.pos.add(kksOpt.eGravity.multiplyScalar(timeUnit));
                 parr.push(p);
                 varr.push(p.pos);
                 if (kksOpt.rColors) carr.push(p.clr);
@@ -367,6 +374,7 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
         var ctx = this;
         var kksData = ctx.$kksData;
         var kksOpt = ctx.$kksOpt;
+        var timeUnit = kksData.time == 0 ? 0.16 : deltaTime / 1000;
 
         var parr = [];
         var varr = [];
@@ -379,8 +387,8 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
             var p = kksData.ePoints[i];
             p.life -= deltaTime;
             if (p.life > 0) {
-                p.acc.add(kksOpt.eGravity);
-                p.pos.add(p.acc);
+                p.acc.add(kksOpt.eGravity.multiplyScalar(timeUnit));
+                p.pos.add(p.acc.clone().multiplyScalar(timeUnit));
                 parr.push(p);
                 varr.push(p.pos);
                 if (kksOpt.eColors) carr.push(p.clr);
@@ -442,6 +450,8 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
         var kksData = ctx.$kksData;
         var kksOpt = ctx.$kksOpt;
 
+        var timeUnit = kksData.time == 0 ? 0.16 : deltaTime / 1000;
+
         var parr = [];
         var varr = [];
         var carr = [];
@@ -453,7 +463,7 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
             var p = kksData.bPoints[i];
             p.life -= deltaTime;
             if (p.life > 0) {
-                p.pos.add(p.acc);
+                p.pos.add(p.acc.clone().multiplyScalar(timeUnit));
                 parr.push(p);
                 varr.push(p.pos);
                 if (kksOpt.bColors || kksOpt.eColors) carr.push(p.clr);
@@ -474,12 +484,15 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
     /**
      * 生成新的发射粒子;
      */
-    function genRocket() {
+    function genRocket(deltaTime) {
         var ctx = this;
         var kksData = ctx.$kksData;
         var kksOpt = ctx.$kksOpt;
 
-        for (var i = 0; i < kksOpt.rCount; i++) {
+        var timeUnit = kksData.time == 0 ? 0.16 : deltaTime / 1000;
+        var n = Math.ceil(kksOpt.rCount * timeUnit);
+
+        for (var i = 0; i < n; i++) {
             var p = {};
             p.pos = new THREE.Vector3(0, 0, 0);
             var accx = genRandom() * kksOpt.rSpread;

@@ -4,8 +4,6 @@
  * 随机舞动dance效果需要SimplexNoise和polyfill/typedarray支持
  */
 
-
-
 (function () {
     //获取预设所在路径
     var js = document.scripts;
@@ -148,6 +146,7 @@
 
         for (var i = 0; i < n; i++) {
             var p = {};
+
             var x = kksOpt.pos.x + Math.random() * kksOpt.box.x - kksOpt.box.x / 2;
             var y = kksOpt.pos.y + kksOpt.boxHeight + Math.random() * kksOpt.box.y - kksOpt.box.y / 2;
             var z = kksOpt.pos.z + Math.random() * kksOpt.box.z - kksOpt.box.z / 2;
@@ -220,7 +219,7 @@
     };
 
 
-
+    //--------------ext function-------
     /**
      * 生成随机数字,正负值,-1到+1
      * @returns {number} res
