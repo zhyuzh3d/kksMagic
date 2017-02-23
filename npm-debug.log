@@ -1,0 +1,107 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'publish' ]
+2 info using npm@3.10.9
+3 info using node@v7.2.0
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   escapedName: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/Users/zhyuzh/Desktop/Projects/kksMagic',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /Users/zhyuzh/.npm/kks-magic/0.12.5/package.tgz not in flight; packing
+9 verbose correctMkdir /Users/zhyuzh/.npm correctMkdir not in flight; initializing
+10 info lifecycle kks-magic@0.12.5~prepublish: kks-magic@0.12.5
+11 silly lifecycle kks-magic@0.12.5~prepublish: no script for prepublish, continuing
+12 verbose tar pack [ '/Users/zhyuzh/.npm/kks-magic/0.12.5/package.tgz',
+12 verbose tar pack   '/Users/zhyuzh/Desktop/Projects/kksMagic' ]
+13 verbose tarball /Users/zhyuzh/.npm/kks-magic/0.12.5/package.tgz
+14 verbose folder /Users/zhyuzh/Desktop/Projects/kksMagic
+15 verbose addLocalTarball adding from inside cache /Users/zhyuzh/.npm/kks-magic/0.12.5/package.tgz
+16 verbose correctMkdir /Users/zhyuzh/.npm correctMkdir not in flight; initializing
+17 silly cache afterAdd kks-magic@0.12.5
+18 verbose afterAdd /Users/zhyuzh/.npm/kks-magic/0.12.5/package/package.json not in flight; writing
+19 verbose correctMkdir /Users/zhyuzh/.npm correctMkdir not in flight; initializing
+20 verbose afterAdd /Users/zhyuzh/.npm/kks-magic/0.12.5/package/package.json written
+21 silly publish { name: 'kks-magic',
+21 silly publish   version: '0.12.5',
+21 silly publish   description: 'a-frame particles entity plugin.',
+21 silly publish   main: './dist/kksMagic/kksMagic.js',
+21 silly publish   scripts: { test: 'echo "Error: no test specified" && exit 1' },
+21 silly publish   repository:
+21 silly publish    { type: 'git',
+21 silly publish      url: 'git+https://github.com/zhyuzh3d/kksMagic.git' },
+21 silly publish   keywords: [ 'a-frame', 'threejs', 'particle' ],
+21 silly publish   author: { name: 'zhyuzh' },
+21 silly publish   license: 'MIT',
+21 silly publish   bugs: { url: 'https://github.com/zhyuzh3d/kksMagic/issues' },
+21 silly publish   homepage: 'https://github.com/zhyuzh3d/kksMagic#readme',
+21 silly publish   readme: '# kksMagic v0.12.05 \n###kksFireWork 0.5.2 / kksSnow 0.2.0\n小于1.0的测试版本请勿使用，仅供参考\n\n基于ThreeJs的A-frame粒子特效Entity对象插件\n包括飘雪、焰火以及更多内容\n\nFireworks&more from 10knet.com; Base on Threejs.\n\n---\n###kksMagic快速上手(基于v0.12)\n\n####1.在html页面`<head>`中引用A-frame.js和kksMagic.js文件：\n\n    <script src="./dist/lib/aframe.min.js"></script>\n    <script src="./dist/kksMagic/kksMagic.js"></script>\n    \n####2.引用需要使用的预设，比如烟花kksFireWorks:\n\n    <script src="./dist/kksFireWorks/kksFireWorks.js"></script>\n    \n####3.在`<body>`内的`<a-scene>`节点内添加`<a-entity>`节点，指定熟悉kks-magic选项（options选项应参照每个预设的使用说明）:\n\n\n    <a-scene>\n        <a-entity position=\'0 2 -15\' kks-magic=\'preset:fireworks;options:{eColor:"#FF3333"}\'></a-entity>\n        <a-sky color=\'#000\'></a-sky><br>\n    </a-scene>\n    \n####4.更多内容请参照项目的index.html文件内demo效果使用\n\n---\n\n###preset:kksFireWorks(v0.5.2)\n\n####示例:\n\nkks-magic=\'preset:fireworks;options:{eColor:"#FF3333"}\'\n\n####说明:\n\n#####焰火绽放效果分为4个阶段：\n\n1.Rocket，发射阶段，指从地面发射到空中的过程，火箭拖尾效果；不能关闭；\n\n2.Explore，爆炸阶段，发射器到达最高点开始爆炸，形成焰火；不能关闭；\n\n3.Trail，爆炸拖尾阶段，爆炸开来的每个粒子都可以产生拖尾效果；useTrail为1开启；\n\n4.Bloom，绽放阶段，爆炸开来的每个粒子生命终结后会引发新的爆炸，这里叫做绽放；useBloom为1开启。\n\n####Option设置参数说明：\n\n```javascript\n{\n    rMaxCount:1000,//发射粒子最大数量，超过这个值的粒子被忽略\n    rCount: 1, //发射器每帧喷发的粒子数量，推荐1～5\n    rSpeed: 2, //发射器向上飞行的速度，推荐1~5\n    rSpread: 0.01, //发射器粒子扩散范围，数值越大拖尾越宽，推荐0.01~0.05\n    rLife: 200, //发射器粒子的最大生命值,毫秒，值越大拖尾越长，推荐100~1000\n    rLifeRand: 100, //发射器粒子生命值的随机值，下同，推荐参照rLife设置\n    rSize: 3, //发射器粒子大小，推荐1～5\n    rColor: \'#c7f6ff\', //发射器粒子颜色，如果需要多种颜色请使用rColors，下同\n    rColors: [\'#FF0000\', \'#dd1fff\', \'#ff6200\'], //发射器粒子随机颜色\n    rTexture: path + "/imgs/dot-64.png", //发射器粒子的形状贴图\n    eMaxCount:2000,//爆炸粒子最大数量，超过这个值的粒子被忽略\n    eCount: 10, //爆炸粒子数量，如果使用爆炸拖尾和绽放，请尽可能设置最小如5～20；否则推荐100~2000\n    eSize: 3, //爆炸粒子大小，推荐1～5\n    eColor: \'#ff67ff\', //爆炸粒子颜色\n    eColors: [\'#ff52ff\', \'#ffff42\', \'#76ffff\'], //爆炸粒子随机颜色\n    eTexture: path + "/imgs/dot-64.png", //爆炸粒子形状贴图\n    eAcc: 0.75, //爆炸粒子炸开的加速度，值越大炸爆炸圆越大，推荐0.5~2\n    eAccRand: 0.1, //随机值,值越大爆炸圆形越不清晰\n    eLife: 500, //爆炸粒子最大生命值，值越大爆炸圆越大\n    eLifeRand: 300, //随机值\n    eGravity: \'0 -0.04 0\', //重力值，会拉伸爆炸圆，同时影响爆炸、拖尾和绽放，不推荐设置\n    eSpeed: \'0 1.5 0\', //爆炸器自身速度，用于中和重力值，不推荐设置\n    eHeight: 50, //爆炸高度，发射器到达这个高度后触发爆炸\n    useTrail: 1, //是否使用爆炸拖尾\n    tMaxCount:2000,//拖尾粒子最大数量，超过这个值的粒子被忽略\n    tCount: 5, //拖尾每帧产生粒子数量，推荐1～5\n    tSize: 2, //拖尾粒子大小\n    tSpread: 0.1, //拖尾扩散范围，值越大拖尾越宽,推荐0.05~0.3\n    tLife: 500, //拖尾粒子生命最大值\n    tOpacity: 0.6, //拖尾透明值。拖尾的颜色由炸开的粒子控制；不能单独设置\n    useBloom: 1, //是否使用绽放效果，绽放是爆炸开的粒子再次进行爆炸\n    bMaxCount:5000,//绽放粒子最大数量，超过这个值的粒子被忽略\n    bCount: 200, //每个绽放爆炸的粒子数量，推荐100～1000\n    bCountRand: 100, //随机值\n    bColors: undefined, //绽放粒子随机颜色；绽放粒子颜色由炸开粒子颜色控制，但也可使用随机色\n    bSize: 2, //绽放粒子的大小，推荐1～3\n    bTexture: path + "/imgs/dot-64.png", //绽放粒子形状贴图\n    bAcc: 0.5, //绽放粒子加速度\n    bAccRand: 0.0, //随机值\n    bLife: 500, //绽放粒子生命最大值\n    bLifeRand: 200, //随机值\n}\n```\n\n---\n\n###preset:kksSnow(v0.2.0)\n\n####示例:\n\nkks-magic=\'preset:snow;options:{color:"#FFFFFF"}\'\n\n####说明:\n\n####所有选项支持动态调整，方法如下（5秒后开始生成随机的绿色、蓝色雪花）\n\n```javascript\nsetTimeout(function () {\n    var snow = document.querySelector(\'#snow\');\n    snow.emit(\'kksUpdate\', {\n        colors: [\'#00FF00\',\'#0000FF\']\n    });\n}, 5000);\n```\n\n####Option设置参数说明\n```javascript\n {\n    maxCount: 2000, //最大雪花数量，超过这个数量的雪花会被忽略\n    count: 20, //每秒产生雪花数量，推荐60～100\n    size: 1, //雪花大小，不推荐修改\n    speed: 5, //每秒向下移动数值\n    color: \'#FFFFFF\', //雪花的颜色，不推荐修改\n    colors: undefined, //随机颜色，数组，将覆盖color选项。不推荐使用\n    opacity: 0.66, //雪花透明度，推荐0.1～1\n    textrue: path + "imgs/dot-64.png", //雪花的形状图片，不推荐修改\n    height: 50, //雪花生成的高度，不推荐修改\n    low: -20, //雪花消失的高度，不推荐修改\n    range: 100, //飘雪的范围，范围越大需要生成越多的雪花\n    pos: \'0 0 0\', //飘雪范围的中心，不推荐修改\n}\n```\n\n\n---\n###版本历史\n\n####kksSnow v0.2.0 / 170223\n\n调整代码结构\n\n完善各种设置选项\n\n增加动态updateOpt事件支持\n\n####kksFireWorks v0.5.2 / 170223\n\n增加四个阶段的MaxCount最大粒子数量参数，必要时保证性能\n\n####kksFireWorks v0.5.0 / 170221\n\n增加了爆炸拖尾效果\n\n增加了二次爆炸（绽放）效果\n\n增加了随机颜色功能\n\n增加了粒子完结之后自动清除自身Entity的功能\n\n####kksFireWorks v0.2 / 170219\n\n实现了rocket基本的发射拖尾效果；\n\n改为使用THREE.Group；附着两个变量$kksRocket，$kksExplore;\n\n将外部选项和数据规整到Entity内，合并用户设定，分别附着到$kksOpt和$kksData;\n\n更多参照上面的选项说明。\n\n####KKsMagic v0.12 / 170219\n\n调整变量命名规则，附着在Entity上的新增属性都以$kks开头；原来的.kk指针改为.$kksMagic；kksSnow和kksFireWorks也已同步调整。\n\n####KKsMagic v0.1 / kksSnow v0.1 / kksFireWorks v0.1 / 170218\n\n整理项目结构，最终代码都放在dist文件夹。\n\nkksMagic提供最基础的A-frame对象注册功能，所有其他的飘雪、焰火等插件仅仅是提供kksMagic的预设。\n\n---\n<small>Create by zhyuzh from 10knet.com</small>\n\n\n',
+21 silly publish   readmeFilename: 'README.md',
+21 silly publish   gitHead: 'cef181aff241fd8cfa65e0d0855c944fd54f79cb',
+21 silly publish   _id: 'kks-magic@0.12.5',
+21 silly publish   _shasum: 'a396d24a3fe15e59aba8028cec0b9a028bf271eb',
+21 silly publish   _from: '.' }
+22 verbose getPublishConfig undefined
+23 silly mapToRegistry name kks-magic
+24 silly mapToRegistry using default registry
+25 silly mapToRegistry registry https://registry.npmjs.org/
+26 silly mapToRegistry data Result {
+26 silly mapToRegistry   raw: 'kks-magic',
+26 silly mapToRegistry   scope: null,
+26 silly mapToRegistry   escapedName: 'kks-magic',
+26 silly mapToRegistry   name: 'kks-magic',
+26 silly mapToRegistry   rawSpec: '',
+26 silly mapToRegistry   spec: 'latest',
+26 silly mapToRegistry   type: 'tag' }
+27 silly mapToRegistry uri https://registry.npmjs.org/kks-magic
+28 verbose publish registryBase https://registry.npmjs.org/
+29 silly publish uploading /Users/zhyuzh/.npm/kks-magic/0.12.5/package.tgz
+30 verbose request uri https://registry.npmjs.org/kks-magic
+31 verbose request sending authorization for write operation
+32 info attempt registry request try #1 at 10:36:26
+33 verbose request using bearer token for auth
+34 verbose request id 52a972e4c05a5cd5
+35 http request PUT https://registry.npmjs.org/kks-magic
+36 http 403 https://registry.npmjs.org/kks-magic
+37 verbose headers { 'content-type': 'application/json',
+37 verbose headers   'cache-control': 'max-age=300',
+37 verbose headers   'content-length': '96',
+37 verbose headers   'accept-ranges': 'bytes',
+37 verbose headers   date: 'Thu, 23 Feb 2017 02:36:30 GMT',
+37 verbose headers   via: '1.1 varnish',
+37 verbose headers   connection: 'keep-alive',
+37 verbose headers   'x-served-by': 'cache-nrt6125-NRT',
+37 verbose headers   'x-cache': 'MISS',
+37 verbose headers   'x-cache-hits': '0',
+37 verbose headers   'x-timer': 'S1487817388.331653,VS0,VE1805',
+37 verbose headers   vary: 'Accept-Encoding' }
+38 verbose request invalidating /Users/zhyuzh/.npm/registry.npmjs.org/kks-magic on PUT
+39 error publish Failed PUT 403
+40 verbose stack Error: "You cannot publish over the previously published version 0.12.5." : kks-magic
+40 verbose stack     at makeError (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:302:12)
+40 verbose stack     at CachingRegistryClient.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:290:14)
+40 verbose stack     at Request._callback (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:210:14)
+40 verbose stack     at Request.self.callback (/usr/local/lib/node_modules/npm/node_modules/request/request.js:187:22)
+40 verbose stack     at emitTwo (events.js:106:13)
+40 verbose stack     at Request.emit (events.js:191:7)
+40 verbose stack     at Request.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:1048:10)
+40 verbose stack     at emitOne (events.js:96:13)
+40 verbose stack     at Request.emit (events.js:188:7)
+40 verbose stack     at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:969:12)
+41 verbose statusCode 403
+42 verbose pkgid kks-magic
+43 verbose cwd /Users/zhyuzh/Desktop/Projects/kksMagic
+44 error Darwin 16.3.0
+45 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "publish"
+46 error node v7.2.0
+47 error npm  v3.10.9
+48 error code E403
+49 error "You cannot publish over the previously published version 0.12.5." : kks-magic
+50 error If you need help, you may report this error at:
+50 error     <https://github.com/npm/npm/issues>
+51 verbose exit [ 1, true ]

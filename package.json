@@ -1,6 +1,6 @@
 {
     "name": "kks-magic",
-    "version": "0.12.05",
+    "version": "0.12.1",
     "description": "a-frame particles entity plugin.",
     "main": "./dist/kksMagic/kksMagic.js",
     "scripts": {
