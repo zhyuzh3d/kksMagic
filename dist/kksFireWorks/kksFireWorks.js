@@ -1,8 +1,7 @@
 /**
- * v0.5.0
+ * v0.5.2
  * Licence:Using this software, you have agreed to this,every fireworks is your blessing for kk.
  * KKsMagic焰火插件预设
- * options:{};
  */
 
 console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n————洛天依《干物女/WeiWei》\nThanks for use kks-Magic and kks-fireworks.');
@@ -32,6 +31,7 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
 
         //默认设置
         ctx.$kksOpt = {
+            rMaxCount:1000,//发射粒子最大数量，超过这个值的粒子被忽略
             rCount: 1, //发射器每帧喷发的粒子数量，推荐1～5
             rSpeed: 2, //发射器向上飞行的速度，推荐1~5
             rSpread: 0.01, //发射器粒子扩散范围，数值越大拖尾越宽，推荐0.01~0.05
@@ -41,6 +41,7 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
             rColor: '#c7f6ff', //发射器粒子颜色，如果需要多种颜色请使用rColors，下同
             rColors: ['#FF0000', '#dd1fff', '#ff6200'], //发射器粒子随机颜色
             rTexture: path + "/imgs/dot-64.png", //发射器粒子的形状贴图
+            eMaxCount:2000,//爆炸粒子最大数量，超过这个值的粒子被忽略
             eCount: 10, //爆炸粒子数量，如果使用爆炸拖尾和绽放，请尽可能设置最小如5～20；否则推荐100~2000
             eSize: 3, //爆炸粒子大小，推荐1～5
             eColor: '#ff67ff', //爆炸粒子颜色
@@ -54,12 +55,14 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
             eSpeed: '0 1.5 0', //爆炸器自身速度，用于中和重力值，不推荐设置
             eHeight: 50, //爆炸高度，发射器到达这个高度后触发爆炸
             useTrail: 1, //是否使用爆炸拖尾
+            tMaxCount:2000,//拖尾粒子最大数量，超过这个值的粒子被忽略
             tCount: 5, //拖尾每帧产生粒子数量，推荐1～5
             tSize: 2, //拖尾粒子大小
             tSpread: 0.1, //拖尾扩散范围，值越大拖尾越宽,推荐0.05~0.3
             tLife: 500, //拖尾粒子生命最大值
             tOpacity: 0.6, //拖尾透明值。拖尾的颜色由炸开的粒子控制；不能单独设置
             useBloom: 1, //是否使用绽放效果，绽放是爆炸开的粒子再次进行爆炸
+            bMaxCount:5000,//绽放粒子最大数量，超过这个值的粒子被忽略
             bCount: 200, //每个绽放爆炸的粒子数量，推荐100～1000
             bCountRand: 100, //随机值
             bColors: undefined, //绽放粒子随机颜色；绽放粒子颜色由炸开粒子颜色控制，但也可使用随机色
@@ -293,7 +296,11 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
         var parr = [];
         var varr = [];
         var carr = [];
-        for (var i = 0; i < kksData.tPoints.length; i++) {
+
+        //使用最新的粒子，超过数量限制的忽略掉
+        var offset = kksData.tPoints.length < kksOpt.rMaxCount ? 0 : kksData.tPoints.length - kksOpt.rMaxCount;
+
+        for (var i = offset; i < kksData.tPoints.length; i++) {
             var p = kksData.tPoints[i];
             p.life -= deltaTime;
             if (p.life > 0) {
@@ -328,7 +335,11 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
         var parr = [];
         var varr = [];
         var carr = [];
-        for (var i = 0; i < kksData.rPoints.length; i++) {
+
+        //使用最新的粒子，超过数量限制的忽略掉
+        var offset = kksData.rPoints.length < kksOpt.rMaxCount ? 0 : kksData.rPoints.length - kksOpt.rMaxCount;
+
+        for (var i = offset; i < kksData.rPoints.length; i++) {
             var p = kksData.rPoints[i];
             p.life -= deltaTime;
             if (p.life > 0) {
@@ -360,7 +371,11 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
         var parr = [];
         var varr = [];
         var carr = [];
-        for (var i = 0; i < kksData.ePoints.length; i++) {
+
+        //使用最新的粒子，超过数量限制的忽略掉
+        var offset = kksData.ePoints.length < kksOpt.eMaxCount ? 0 : kksData.ePoints.length - kksOpt.eMaxCount;
+
+        for (var i = offset; i < kksData.ePoints.length; i++) {
             var p = kksData.ePoints[i];
             p.life -= deltaTime;
             if (p.life > 0) {
@@ -430,7 +445,11 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
         var parr = [];
         var varr = [];
         var carr = [];
-        for (var i = 0; i < kksData.bPoints.length; i++) {
+
+        //使用最新的粒子，超过数量限制的忽略掉
+        var offset = kksData.bPoints.length < kksOpt.bMaxCount ? 0 : kksData.bPoints.length - kksOpt.bMaxCount;
+
+        for (var i = offset; i < kksData.bPoints.length; i++) {
             var p = kksData.bPoints[i];
             p.life -= deltaTime;
             if (p.life > 0) {

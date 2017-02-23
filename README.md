@@ -1,5 +1,5 @@
 # kksMagic v0.12.05 
-###kksFireWork 0.5.0 / kksSnow 0.1.0
+###kksFireWork 0.5.2 / kksSnow 0.2.0
 小于1.0的测试版本请勿使用，仅供参考
 
 基于ThreeJs的A-frame粒子特效Entity对象插件
@@ -31,7 +31,7 @@ Fireworks&more from 10knet.com; Base on Threejs.
 
 ---
 
-###preset:kksFireWorks(v0.2)
+###preset:kksFireWorks(v0.5.2)
 
 ####示例:
 
@@ -53,6 +53,7 @@ kks-magic='preset:fireworks;options:{eColor:"#FF3333"}'
 
 ```javascript
 {
+    rMaxCount:1000,//发射粒子最大数量，超过这个值的粒子被忽略
     rCount: 1, //发射器每帧喷发的粒子数量，推荐1～5
     rSpeed: 2, //发射器向上飞行的速度，推荐1~5
     rSpread: 0.01, //发射器粒子扩散范围，数值越大拖尾越宽，推荐0.01~0.05
@@ -62,6 +63,7 @@ kks-magic='preset:fireworks;options:{eColor:"#FF3333"}'
     rColor: '#c7f6ff', //发射器粒子颜色，如果需要多种颜色请使用rColors，下同
     rColors: ['#FF0000', '#dd1fff', '#ff6200'], //发射器粒子随机颜色
     rTexture: path + "/imgs/dot-64.png", //发射器粒子的形状贴图
+    eMaxCount:2000,//爆炸粒子最大数量，超过这个值的粒子被忽略
     eCount: 10, //爆炸粒子数量，如果使用爆炸拖尾和绽放，请尽可能设置最小如5～20；否则推荐100~2000
     eSize: 3, //爆炸粒子大小，推荐1～5
     eColor: '#ff67ff', //爆炸粒子颜色
@@ -75,12 +77,14 @@ kks-magic='preset:fireworks;options:{eColor:"#FF3333"}'
     eSpeed: '0 1.5 0', //爆炸器自身速度，用于中和重力值，不推荐设置
     eHeight: 50, //爆炸高度，发射器到达这个高度后触发爆炸
     useTrail: 1, //是否使用爆炸拖尾
+    tMaxCount:2000,//拖尾粒子最大数量，超过这个值的粒子被忽略
     tCount: 5, //拖尾每帧产生粒子数量，推荐1～5
     tSize: 2, //拖尾粒子大小
     tSpread: 0.1, //拖尾扩散范围，值越大拖尾越宽,推荐0.05~0.3
     tLife: 500, //拖尾粒子生命最大值
     tOpacity: 0.6, //拖尾透明值。拖尾的颜色由炸开的粒子控制；不能单独设置
     useBloom: 1, //是否使用绽放效果，绽放是爆炸开的粒子再次进行爆炸
+    bMaxCount:5000,//绽放粒子最大数量，超过这个值的粒子被忽略
     bCount: 200, //每个绽放爆炸的粒子数量，推荐100～1000
     bCountRand: 100, //随机值
     bColors: undefined, //绽放粒子随机颜色；绽放粒子颜色由炸开粒子颜色控制，但也可使用随机色
@@ -95,19 +99,58 @@ kks-magic='preset:fireworks;options:{eColor:"#FF3333"}'
 
 ---
 
-###preset:kksSnow(v0.1)
+###preset:kksSnow(v0.2.0)
 
 ####示例:
 
-kks-magic='preset:snow;options:{color:"#ff00ff"}'
+kks-magic='preset:snow;options:{color:"#FFFFFF"}'
 
 ####说明:
 
-* color 雪花颜色，字符串16进制如"#FF0000"，或者0xFF0000
+####所有选项支持动态调整，方法如下（5秒后开始生成随机的绿色、蓝色雪花）
+
+```javascript
+setTimeout(function () {
+    var snow = document.querySelector('#snow');
+    snow.emit('kksUpdate', {
+        colors: ['#00FF00','#0000FF']
+    });
+}, 5000);
+```
+
+####Option设置参数说明
+```javascript
+ {
+    maxCount: 2000, //最大雪花数量，超过这个数量的雪花会被忽略
+    count: 20, //每秒产生雪花数量，推荐60～100
+    size: 1, //雪花大小，不推荐修改
+    speed: 5, //每秒向下移动数值
+    color: '#FFFFFF', //雪花的颜色，不推荐修改
+    colors: undefined, //随机颜色，数组，将覆盖color选项。不推荐使用
+    opacity: 0.66, //雪花透明度，推荐0.1～1
+    textrue: path + "imgs/dot-64.png", //雪花的形状图片，不推荐修改
+    height: 50, //雪花生成的高度，不推荐修改
+    low: -20, //雪花消失的高度，不推荐修改
+    range: 100, //飘雪的范围，范围越大需要生成越多的雪花
+    pos: '0 0 0', //飘雪范围的中心，不推荐修改
+}
+```
 
 
 ---
 ###版本历史
+
+####kksSnow v0.2.0 / 170223
+
+调整代码结构
+
+完善各种设置选项
+
+增加动态updateOpt事件支持
+
+####kksFireWorks v0.5.2 / 170223
+
+增加四个阶段的MaxCount最大粒子数量参数，必要时保证性能
 
 ####kksFireWorks v0.5.0 / 170221
 

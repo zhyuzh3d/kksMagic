@@ -1,10 +1,6 @@
 /**
- * 此snow预设仅供参考，实际与default预设基本相同,但使用了THREE.Group
- * <a-entity kks-magic='preset:snow;options:{color:"#E91E61"}'></a-entity>
- * 必须实现preset_init,preset_tick,preset_update三个函数
- * ctx.$kksMagic指向aframe组件的threejs对象，比如ctx.$kksMagic.geometry指向
- * preset_init必须返回一个THREE.Points对象
- * 可以使用ctx.data.options中用户自定义参数，请注意是否需要parse处理
+ * v0.2.0
+ * KKsMagic飘雪预设
  */
 
 
@@ -22,6 +18,22 @@
         desc: 'A 400X400X400 snow box,not textured,with options.color,as default preset.',
     });
 
+
+    var kksOpt = {
+        maxCount: 2000, //最大雪花数量，超过这个数量的雪花会被忽略
+        count: 20, //每秒产生雪花数量，推荐60～100
+        size: 1, //雪花大小，不推荐修改
+        speed: 5, //每秒向下移动数值
+        color: '#FFFFFF', //雪花的颜色，不推荐修改
+        colors: undefined, //随机颜色，数组，将覆盖color选项。不推荐使用
+        opacity: 0.66, //雪花透明度，推荐0.1～1
+        textrue: path + "imgs/dot-64.png", //雪花的形状图片，不推荐修改
+        height: 50, //雪花生成的高度，不推荐修改
+        low: -20, //雪花消失的高度，不推荐修改
+        range: 100, //飘雪的范围，范围越大需要生成越多的雪花
+        pos: '0 0 0', //飘雪范围的中心，不推荐修改
+    }
+
     /**
      * 默认的初始化粒子函数,
      * 400立方的范围随机生成粒子
@@ -38,6 +50,8 @@
         };
 
         genOpt.call(ctx);
+
+
 
         //生成Object3D对象
         ctx.$kksSnow = new THREE.Points(new THREE.Geometry(), ctx.$kksData.mat);
@@ -75,29 +89,16 @@
      */
     function genOpt() {
         var ctx = this;
-        ctx.$kksOpt = {
-            count: 20, //每秒产生雪花数量，推荐60～100
-            size: 1, //雪花大小，不推荐修改
-            speed: 5, //每秒向下移动数值
-            color: '#FFFFFF', //雪花的颜色，不推荐修改
-            colors: undefined, //随机颜色，数组，将覆盖color选项。不推荐使用
-            opacity: 0.66, //雪花透明度，推荐0.1～1
-            textrue: path + "imgs/dot-64.png", //雪花的形状图片，不推荐修改
-            height: 50, //雪花生成的高度，不推荐修改
-            low: -20, //雪花消失的高度，不推荐修改
-            range: 100, //飘雪的范围，范围越大需要生成越多的雪花
-            pos: '0 0 0', //飘雪范围的中心，不推荐修改
-        };
+        ctx.$kksOpt = kksOpt;
 
         //合并用户设置，整理数据，以及数量限定
         ctx.$kksOpt = Object.assign(ctx.$kksOpt, ctx.data.options);
 
-        //数量最大限定
-        if (ctx.$kksOpt.count > 500) ctx.$kksOpt.eCount = 500;
-
         //整理数据
-        var posArr = ctx.$kksOpt.pos.split(' ');
-        ctx.$kksOpt.pos = new THREE.Vector3(Number(posArr[0]), Number(posArr[1]), Number(posArr[2]));
+        if (ctx.$kksOpt.pos.constructor == String) {
+            var posArr = ctx.$kksOpt.pos.split(' ');
+            ctx.$kksOpt.pos = new THREE.Vector3(Number(posArr[0]), Number(posArr[1]), Number(posArr[2]));
+        };
 
         //生成材质
         var mat = new THREE.PointsMaterial({
@@ -167,12 +168,13 @@
         var parr = [];
         var varr = [];
         var carr = [];
+
         //使用最新的雪花，超过数量限制的忽略掉
-        var offset = kksData.points.length < 5000 ? 0 : 5000 - kksData.points.length;
+        var offset = kksData.points.length < ctx.$kksOpt.maxCount ? 0 : kksData.points.length - ctx.$kksOpt.maxCount;
 
         for (var i = offset; i < kksData.points.length; i++) {
             var p = kksData.points[i];
-            if (p.pos.y >= kksOpt.low) {
+            if (p && p.pos && p.pos.y >= kksOpt.low) {
                 p.pos.setY(p.pos.y -= kksOpt.speed * deltaTime / 1000);
                 parr.push(p);
                 varr.push(p.pos);
@@ -188,6 +190,7 @@
 
         ctx.$kksSnow.geometry = newGeo;
     };
+
 
 })();
 
