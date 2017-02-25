@@ -42,21 +42,18 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
             rColors: ['#FF0000', '#dd1fff', '#ff6200'], //发射器粒子随机颜色
             rTexture: path + "/imgs/dot-64.png", //发射器粒子的形状贴图
             eMaxCount: 2000, //爆炸粒子最大数量，超过这个值的粒子被忽略
-            eCount: 20, //爆炸粒子数量，如果使用爆炸拖尾和绽放，请尽可能设置最小如5～20；否则推荐100~2000
+            eCount: 10, //爆炸粒子数量，如果使用爆炸拖尾和绽放，请尽可能设置最小如5～20；否则推荐100~2000
             eSize: 3, //爆炸粒子大小，推荐1～5
             eColor: '#ff67ff', //爆炸粒子颜色
             eColors: ['#ff52ff', '#ffff42', '#76ffff'], //爆炸粒子随机颜色
             eTexture: path + "/imgs/dot-64.png", //爆炸粒子形状贴图
             eAcc: 70, //爆炸粒子炸开的加速度，值越大炸爆炸圆越大，推荐50~100
             eAccRand: 10, //随机值,值越大爆炸圆形越不清晰
-            eLife: 8000, //爆炸粒子最大生命值，值越大爆炸圆越大
-            eLifeRand: 8000, //随机值
-            eGravity: '0 -100 0', //重力值，会拉伸爆炸圆，同时影响爆炸、拖尾和绽放
+            eLife: 400, //爆炸粒子最大生命值，值越大爆炸圆越大
+            eLifeRand: 100, //随机值
+            eGravity: '0 -100 0', //重力值，会拉伸爆炸圆，同时影响爆炸、拖尾和绽放，不推荐设置
             eSpeed: '0 10 0', //爆炸器自身速度，用于中和重力值，不推荐设置
             eHeight: 80, //爆炸高度，发射器到达这个高度后触发爆炸
-            ePattern: path + "/imgs/pattern.png", //爆炸形成的图案
-            ePatternScale: 1, //图案放缩大小，默认为原图像素单位，请不要使用太大像素的图片
-            ePatternRotation: '0 0 0', //图案的旋转角度，默认为水平位置
             useTrail: 1, //是否使用爆炸拖尾
             tMaxCount: 2000, //拖尾粒子最大数量，超过这个值的粒子被忽略
             tCount: 120, //拖尾每秒产生粒子数量，推荐50～200
@@ -91,7 +88,6 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
         if (ctx.$kksOpt.eCount > 10000) ctx.$kksOpt.eCount = 10000;
         if (ctx.$kksOpt.useTrail && ctx.$kksOpt.eCount > 100) ctx.$kksOpt.eCount = 100;
         if (ctx.$kksOpt.useBloom && ctx.$kksOpt.bCount > 1000) ctx.$kksOpt.bCount = 1000;
-
 
         //生成发射材质
         var rMat = new THREE.PointsMaterial({
@@ -141,8 +137,6 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
             tColors: [],
             bPoints: [],
             bColors: [],
-            pPoints: [],
-            pColors: [],
             height: 0,
             level: 0,
             levels: {
@@ -154,31 +148,6 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
             eMat: eMat,
             time: 0,
         };
-
-
-        //计算图案点的相对于原点的位置
-        if (ctx.$kksOpt.ePattern) {
-            var img = document.getElementById("kksFireWorksPattern");
-            var imgData = getImageData(img);
-            for (var i = 0; ctx.$kksData.pPoints.length < ctx.$kksOpt.eCount; i++) {
-                var px = Math.floor(Math.random() * img.width);
-                var pz = Math.floor(Math.random() * img.height);
-                var clr = getPixel(imgData, px, pz);
-                if (clr.a > 10) {
-                    var p = {};
-                    p.pos = new THREE.Vector3(px, 0, pz);
-                    p.clr = new THREE.Color(clr.r / 255, clr.g / 255, clr.b / 255);
-                    ctx.$kksData.pPoints.push(p);
-                };
-            };
-        };
-
-
-
-
-
-
-
 
         //生成Object3D对象
         ctx.$kksRocket = new THREE.Points(new THREE.Geometry(), rMat);
@@ -283,7 +252,7 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
         };
 
         //烟花完毕后将整个元素移除
-        if (kksData.level > 0 && kksData.ePoints.length < 1 && kksData.rPoints.length < 1 && kksData.tPoints.length < 1 && kksData.bPoints.length < 1) {
+        if (kksData.level > 0 && kksData.tPoints.length < 1 && kksData.rPoints.length < 1 && kksData.tPoints.length < 1 && kksData.bPoints.length < 1) {
             ctx.el.parentNode.removeChild(ctx.el);
         };
     };
@@ -354,79 +323,6 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
         if (kksOpt.eColors) newGeo.colors = carr;
 
         ctx.$kksTrail.geometry = newGeo;
-    };
-
-
-
-    /**
-     * 爆炸粒子结束时候生成绽放粒子
-     */
-    function genBloom(particle) {
-        var ctx = this;
-        var kksData = ctx.$kksData;
-        var kksOpt = ctx.$kksOpt;
-
-        var count = kksOpt.bCount - genRandom() * kksOpt.bCountRand;
-
-        for (var i = 0; i < count; i++) {
-            var p = {};
-            var pos = genBallPoint();
-            p.pos = pos.clone().multiplyScalar(0.5);
-            p.pos.add(particle.pos);
-            p.acc = pos.multiplyScalar(kksOpt.bAcc + genRandom() * kksOpt.bAccRand);
-            p.life = kksOpt.bLife + genRandom() * kksOpt.bLifeRand;
-            kksData.bPoints.push(p);
-
-            //处理多种颜色
-            if (kksOpt.bColors) {
-                //绽放随机颜色
-                var clr = kksOpt.bColors[i % kksOpt.bColors.length];
-                p.clr = clr;
-                ctx.$kksData.bColors.push(clr);
-            } else if (kksOpt.eColors) {
-                //绽放爆炸粒子的颜色
-                p.clr = particle.clr;
-                ctx.$kksData.bColors.push(p.clr);
-            };
-        };
-    };
-
-
-    /**
-     * 每tick计算绽放粒子的状态
-     */
-    function bloomTick(deltaTime) {
-        var ctx = this;
-        var kksData = ctx.$kksData;
-        var kksOpt = ctx.$kksOpt;
-
-        var timeUnit = kksData.time == 0 ? 0.16 : deltaTime / 1000;
-
-        var parr = [];
-        var varr = [];
-        var carr = [];
-
-        //使用最新的粒子，超过数量限制的忽略掉
-        var offset = kksData.bPoints.length < kksOpt.bMaxCount ? 0 : kksData.bPoints.length - kksOpt.bMaxCount;
-
-        for (var i = offset; i < kksData.bPoints.length; i++) {
-            var p = kksData.bPoints[i];
-            p.life -= deltaTime;
-            if (p.life > 0) {
-                p.pos.add(p.acc.clone().multiplyScalar(timeUnit));
-                parr.push(p);
-                varr.push(p.pos);
-                if (kksOpt.bColors || kksOpt.eColors) carr.push(p.clr);
-            };
-        };
-        kksData.bPoints = parr;
-
-        //刷新粒子物体
-        var newGeo = new THREE.Geometry();
-        newGeo.vertices = varr;
-        if (kksOpt.bColors || kksOpt.eColors) newGeo.colors = carr;
-
-        ctx.$kksBloom.geometry = newGeo;
     };
 
 
@@ -511,6 +407,79 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
 
         ctx.$kksExplore.geometry = newGeo;
     };
+
+    /**
+     * 爆炸粒子结束时候生成绽放粒子
+     */
+    function genBloom(particle) {
+        var ctx = this;
+        var kksData = ctx.$kksData;
+        var kksOpt = ctx.$kksOpt;
+
+        var count = kksOpt.bCount - genRandom() * kksOpt.bCountRand;
+
+        for (var i = 0; i < count; i++) {
+            var p = {};
+            var pos = genBallPoint();
+            p.pos = pos.clone().multiplyScalar(0.5);
+            p.pos.add(particle.pos);
+            p.acc = pos.multiplyScalar(kksOpt.bAcc + genRandom() * kksOpt.bAccRand);
+            p.life = kksOpt.bLife + genRandom() * kksOpt.bLifeRand;
+            kksData.bPoints.push(p);
+
+            //处理多种颜色
+            if (kksOpt.bColors) {
+                //绽放随机颜色
+                var clr = kksOpt.bColors[i % kksOpt.bColors.length];
+                p.clr = clr;
+                ctx.$kksData.bColors.push(clr);
+            } else if (kksOpt.eColors) {
+                //绽放爆炸粒子的颜色
+                p.clr = particle.clr;
+                ctx.$kksData.bColors.push(p.clr);
+            };
+        };
+    };
+
+
+    /**
+     * 每tick计算绽放粒子的状态
+     */
+    function bloomTick(deltaTime) {
+        var ctx = this;
+        var kksData = ctx.$kksData;
+        var kksOpt = ctx.$kksOpt;
+
+        var timeUnit = kksData.time == 0 ? 0.16 : deltaTime / 1000;
+
+        var parr = [];
+        var varr = [];
+        var carr = [];
+
+        //使用最新的粒子，超过数量限制的忽略掉
+        var offset = kksData.bPoints.length < kksOpt.bMaxCount ? 0 : kksData.bPoints.length - kksOpt.bMaxCount;
+
+        for (var i = offset; i < kksData.bPoints.length; i++) {
+            var p = kksData.bPoints[i];
+            p.life -= deltaTime;
+            if (p.life > 0) {
+                p.pos.add(p.acc.clone().multiplyScalar(timeUnit));
+                parr.push(p);
+                varr.push(p.pos);
+                if (kksOpt.bColors || kksOpt.eColors) carr.push(p.clr);
+            };
+        };
+        kksData.bPoints = parr;
+
+        //刷新粒子物体
+        var newGeo = new THREE.Geometry();
+        newGeo.vertices = varr;
+        if (kksOpt.bColors || kksOpt.eColors) newGeo.colors = carr;
+
+        ctx.$kksBloom.geometry = newGeo;
+    };
+
+
 
     /**
      * 生成新的发射粒子;
@@ -609,41 +578,6 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
      */
     function genRandomV3(base) {
         return new THREE.Vector3(genRandom(), genRandom(), genRandom());
-    };
-
-
-    /**
-     * 生成图片信息数据
-     * @param   {object}   image dom中的img标记或threejs的textrue.image
-     * @returns {[[Type]]} imageData
-     */
-    function getImageData(image) {
-        var canvas = document.createElement('canvas');
-        canvas.width = image.width;
-        canvas.height = image.height;
-
-        var context = canvas.getContext('2d');
-        context.drawImage(image, 0, 0);
-
-        return context.getImageData(0, 0, image.width, image.height);
-    };
-
-    /**
-     * 获取一个像素的颜色值
-     * @param   {object}   imagedata imageData
-     * @param   {number} x         图像的x坐标
-     * @param   {number} y         图像的y坐标
-     * @returns {object}   {r,g,b,a}
-     */
-    function getPixel(imagedata, x, y) {
-        var position = (x + imagedata.width * y) * 4;
-        var data = imagedata.data;
-        return {
-            r: data[position],
-            g: data[position + 1],
-            b: data[position + 2],
-            a: data[position + 3]
-        };
     };
 
 })();

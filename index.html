@@ -15,8 +15,12 @@
 
 <body>
     <a-scene>
-        <a-entity id='snow' position='-2 2 -15' kks-magic='preset:snow;options:{color:"#FFFFFF"}'></a-entity>
-        <!--        <a-entity position='0 -30 -100' kks-magic='preset:fireworks;options:{eColor:"#FF3333"}'></a-entity>-->
+        <a-assets>
+            <img id="kksFireWorksPattern" src="./dist/kksFireWorks/imgs/pattern.png">
+        </a-assets>
+
+        <!--        <a-entity id='snow' position='-2 2 -15' kks-magic='preset:snow;options:{color:"#FFFFFF"}'></a-entity>-->
+        <a-entity position='0 -30 -100' kks-magic='preset:fireworks;options:{eColor:"#FF3333",useBloom:0,useTrail:0}'></a-entity>
         <a-sky color='#222'></a-sky>
     </a-scene>
     <script src="./index.js"></script>

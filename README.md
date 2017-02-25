@@ -144,6 +144,10 @@ setTimeout(function () {
 ---
 ###版本历史
 
+####kksMagic v0.15.02 / 170225
+
+修复fireworks的elife无效的bug
+
 ####kksMagic v0.15.01 / 170225
 
 只是更新了readme文档

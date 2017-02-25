@@ -42,7 +42,7 @@ window.onload = function () {
     //连续生成焰火
     setInterval(function () {
         var pos = genCirclePoint(50, 70, 0);
-        genFireWork(pos);
+        //genFireWork(pos);
     }, 1000)
 
 
