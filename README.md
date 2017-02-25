@@ -1,11 +1,13 @@
 # kksMagic v0.12.05 
 ###kksFireWork 0.5.2 / kksSnow 0.2.0
-小于1.0的测试版本请勿使用，仅供参考
 
+####DEMO／Home [https://zhyuzh3d.github.io/kksMagic/](https://zhyuzh3d.github.io/kksMagic/)
+
+小于1.0的测试版本请勿使用，仅供参考
 基于ThreeJs的A-frame粒子特效Entity对象插件
 包括飘雪、焰火以及更多内容
 
-Fireworks&more from 10knet.com; Base on Threejs.
+Fireworks&more from 10knet.com; Base on Threejs；Currently only alpha, used with caution。
 
 ---
 ###kksMagic快速上手(基于v0.12)
@@ -141,6 +143,10 @@ setTimeout(function () {
 
 ---
 ###版本历史
+
+####kksMagic v0.15.01 / 170225
+
+只是更新了readme文档
 
 ####Demo/ 170224
 
