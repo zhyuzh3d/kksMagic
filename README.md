@@ -1,4 +1,4 @@
-# kksMagic v0.12.05 
+# kksMagic v0.12.10 
 ###kksFireWork 0.5.2 / kksSnow 0.2.0
 
 ####DEMO／Home [https://zhyuzh3d.github.io/kksMagic/](https://zhyuzh3d.github.io/kksMagic/)
@@ -33,23 +33,37 @@ Fireworks&more from 10knet.com; Base on Threejs；Currently only alpha, used wit
 
 ---
 
-###preset:kksFireWorks(v0.5.2)
+###preset:kksFireWorks(v0.6.0)
 
 ####示例:
 
 kks-magic='preset:fireworks;options:{eColor:"#FF3333"}'
 
+####自定义烟火图案:
+
+先加入asset图片，然后将元素id指定为kksFireWorksPattern(也可以使用pAssetId参数自定义)。
+
+```html
+ <a-assets>
+    <img id="myPattern" src="./dist/kksFireWorks/imgs/pattern.png">
+</a-assets>
+<a-entity position='0 -30 -100' kks-magic='preset:fireworks;options:{eColor:"#FF3333",pAssetId:"myPattern"}'></a-entity>
+
+```
+
 ####说明:
 
-#####焰火绽放效果分为4个阶段：
+#####焰火绽放效果分为5个状态：
 
-1.Rocket，发射阶段，指从地面发射到空中的过程，火箭拖尾效果；不能关闭；
+1.Rocket，发射状态，指从地面发射到空中的过程，火箭拖尾效果；不能关闭；
 
-2.Explore，爆炸阶段，发射器到达最高点开始爆炸，形成焰火；不能关闭；
+2.Explore，爆炸状态，发射器到达最高点开始爆炸，形成焰火；不能关闭；
 
-3.Trail，爆炸拖尾阶段，爆炸开来的每个粒子都可以产生拖尾效果；useTrail为1开启；
+3.Pattern，图案状态，爆炸开来的粒子在空中形成自定义图案，userPattern为1开启，开启后以下两个状态被禁用；
 
-4.Bloom，绽放阶段，爆炸开来的每个粒子生命终结后会引发新的爆炸，这里叫做绽放；useBloom为1开启。
+4.Trail，爆炸拖尾状态，爆炸开来的每个粒子都可以产生拖尾效果；useTrail为1开启；
+
+5.Bloom，绽放状态，爆炸开来的每个粒子生命终结后会引发新的爆炸，这里叫做绽放；useBloom为1开启。
 
 ####Option设置参数说明：
 
@@ -65,19 +79,30 @@ kks-magic='preset:fireworks;options:{eColor:"#FF3333"}'
     rColor: '#c7f6ff', //发射器粒子颜色，如果需要多种颜色请使用rColors，下同
     rColors: ['#FF0000', '#dd1fff', '#ff6200'], //发射器粒子随机颜色
     rTexture: path + "/imgs/dot-64.png", //发射器粒子的形状贴图
+
     eMaxCount: 2000, //爆炸粒子最大数量，超过这个值的粒子被忽略
-    eCount: 10, //爆炸粒子数量，如果使用爆炸拖尾和绽放，请尽可能设置最小如5～20；否则推荐100~2000
+    eCount: 1000, //爆炸粒子数量，如果使用爆炸拖尾和绽放，请尽可能设置最小如5～20；同时影响图案和拖尾
     eSize: 3, //爆炸粒子大小，推荐1～5
     eColor: '#ff67ff', //爆炸粒子颜色
     eColors: ['#ff52ff', '#ffff42', '#76ffff'], //爆炸粒子随机颜色
     eTexture: path + "/imgs/dot-64.png", //爆炸粒子形状贴图
-    eAcc: 80, //爆炸粒子炸开的加速度，值越大炸爆炸圆越大，推荐50~100
+    eAcc: 40, //爆炸粒子炸开的加速度，值越大炸爆炸圆越大，推荐50~100
     eAccRand: 10, //随机值,值越大爆炸圆形越不清晰
-    eLife: 300, //爆炸粒子最大生命值，值越大爆炸圆越大
+    eLife: 1000, //爆炸粒子最大生命值，值越大爆炸圆越大
     eLifeRand: 100, //随机值
-    eGravity: '0 -100 0', //重力值，会拉伸爆炸圆，同时影响爆炸、拖尾和绽放，不推荐设置
-    eSpeed: '0 10 0', //爆炸器自身速度，用于中和重力值，不推荐设置
+    eGravity: '0 -100 0', //重力值，会拉伸爆炸圆，同时影响爆炸和绽放
+    eSpeed: '0 50 0', //爆炸器自身速度，用于中和重力值，不推荐设置
     eHeight: 80, //爆炸高度，发射器到达这个高度后触发爆炸
+
+    usePattern: 0, //是否使用爆炸图案
+    pAssetId: "kksFireWorksPattern", //爆炸形成的图案素材元素的id
+    pScale: 0.25, //图案放缩大小，默认为原图像素单位，请不要使用太大像素的图片
+    pRotationX: 90, //图案的x轴旋转角度，默认为竖直图片
+    pDuration: 500, //组成图案前需要多少毫秒
+    pLife: 1000, //图案粒子的生命时间，必须大于ptime才能形成图案
+    pLifeRand: 500, //随机值
+    pHold: 0, //保持图形，不发散
+
     useTrail: 1, //是否使用爆炸拖尾
     tMaxCount: 2000, //拖尾粒子最大数量，超过这个值的粒子被忽略
     tCount: 120, //拖尾每秒产生粒子数量，推荐50～200
@@ -85,6 +110,7 @@ kks-magic='preset:fireworks;options:{eColor:"#FF3333"}'
     tSpread: 0.2, //拖尾扩散范围，值越大拖尾越宽,推荐0.05~0.3
     tLife: 500, //拖尾粒子生命最大值
     tOpacity: 0.6, //拖尾透明值。拖尾的颜色由炸开的粒子控制；不能单独设置
+
     useBloom: 1, //是否使用绽放效果，绽放是爆炸开的粒子再次进行爆炸
     bMaxCount: 5000, //绽放粒子最大数量，超过这个值的粒子被忽略
     bCount: 200, //每个绽放爆炸的粒子数量，推荐100～1000
@@ -143,6 +169,10 @@ setTimeout(function () {
 
 ---
 ###版本历史
+
+####0.15.10 ／ kksFireworks 0.6.0 / 170226
+
+增加pattern图案功能，爆炸的烟火可以在天空形成特定图案
 
 ####kksMagic v0.15.02 / 170225
 
