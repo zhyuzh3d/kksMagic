@@ -6,7 +6,7 @@ window.onload = function () {
         snow.emit('kksUpdate', {
             colors: ['#00FF00', '#0000FF']
         });
-    }, 3000);
+    }, 2000);
 
     setTimeout(function () {
         var snow = document.querySelector('#snow');
@@ -14,7 +14,7 @@ window.onload = function () {
         snow.emit('kksUpdate', {
             colors: ['#ff00e2', '#ffce00', '#ff0000']
         });
-    }, 6000);
+    }, 4000);
 
 
     /**

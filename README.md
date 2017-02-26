@@ -1,7 +1,7 @@
 # kksMagic v0.12.10 
 ###kksFireWork 0.5.2 / kksSnow 0.2.0
 
-##NEWS:kksFireworks增加pattern图案功能，在空中爆炸形成自定义图案
+![kksMagic_sn&fw_170226b.gif](https://zhyuzh3d.github.io/kksMagic/showReels/kksMagic_sn&fw_170226b.gif)
 
 ####DEMO／Home [https://zhyuzh3d.github.io/kksMagic/](https://zhyuzh3d.github.io/kksMagic/)
 
