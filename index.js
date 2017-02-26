@@ -56,7 +56,7 @@ window.onload = function () {
 
     //连续生成焰火
     setInterval(function () {
-        var pos = genCirclePoint(50, 70, 0);
+        var pos = genCirclePoint(80, 120, 0);
         genFireWork(pos);
     }, 1000)
 
