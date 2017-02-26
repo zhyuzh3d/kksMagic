@@ -1,6 +1,8 @@
 # kksMagic v0.12.10 
 ###kksFireWork 0.5.2 / kksSnow 0.2.0
 
+##NEWS:kksFireworks增加pattern图案功能，在空中爆炸形成自定义图案
+
 ####DEMO／Home [https://zhyuzh3d.github.io/kksMagic/](https://zhyuzh3d.github.io/kksMagic/)
 
 小于1.0的测试版本请勿使用，仅供参考
@@ -76,27 +78,27 @@ kks-magic='preset:fireworks;options:{eColor:"#FF3333"}'
     rLife: 200, //发射器粒子的最大生命值,毫秒，值越大拖尾越长，推荐100~1000
     rLifeRand: 100, //发射器粒子生命值的随机值，下同，推荐参照rLife设置
     rSize: 3, //发射器粒子大小，推荐1～5
-    rColor: '#c7f6ff', //发射器粒子颜色，如果需要多种颜色请使用rColors，下同
-    rColors: ['#FF0000', '#dd1fff', '#ff6200'], //发射器粒子随机颜色
+    rColor: '#90ddff', //发射器粒子颜色，如果需要多种颜色请使用rColors，下同
+    rColors: undefined, //发射器粒子随机颜色
     rTexture: path + "/imgs/dot-64.png", //发射器粒子的形状贴图
 
     eMaxCount: 2000, //爆炸粒子最大数量，超过这个值的粒子被忽略
-    eCount: 1000, //爆炸粒子数量，如果使用爆炸拖尾和绽放，请尽可能设置最小如5～20；同时影响图案和拖尾
+    eCount: 50, //爆炸粒子数量，如果使用爆炸拖尾和绽放，请尽可能设置最小如5～20；同时影响图案和拖尾
     eSize: 3, //爆炸粒子大小，推荐1～5
-    eColor: '#ff67ff', //爆炸粒子颜色
-    eColors: ['#ff52ff', '#ffff42', '#76ffff'], //爆炸粒子随机颜色
+    eColor: '#ff55ff', //爆炸粒子颜色
+    eColors: undefined, //爆炸粒子随机颜色
     eTexture: path + "/imgs/dot-64.png", //爆炸粒子形状贴图
     eAcc: 40, //爆炸粒子炸开的加速度，值越大炸爆炸圆越大，推荐50~100
     eAccRand: 10, //随机值,值越大爆炸圆形越不清晰
     eLife: 1000, //爆炸粒子最大生命值，值越大爆炸圆越大
     eLifeRand: 100, //随机值
     eGravity: '0 -100 0', //重力值，会拉伸爆炸圆，同时影响爆炸和绽放
-    eSpeed: '0 50 0', //爆炸器自身速度，用于中和重力值，不推荐设置
+    eSpeed: '0 80 0', //爆炸器自身速度，用于中和重力值，不推荐设置
     eHeight: 80, //爆炸高度，发射器到达这个高度后触发爆炸
 
     usePattern: 0, //是否使用爆炸图案
     pAssetId: "kksFireWorksPattern", //爆炸形成的图案素材元素的id
-    pScale: 0.25, //图案放缩大小，默认为原图像素单位，请不要使用太大像素的图片
+    pScale: 1, //图案放缩大小，默认为原图像素单位，请不要使用太大像素的图片
     pRotationX: 90, //图案的x轴旋转角度，默认为竖直图片
     pDuration: 500, //组成图案前需要多少毫秒
     pLife: 1000, //图案粒子的生命时间，必须大于ptime才能形成图案

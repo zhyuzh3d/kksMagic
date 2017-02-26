@@ -8,6 +8,14 @@ window.onload = function () {
         });
     }, 3000);
 
+    setTimeout(function () {
+        var snow = document.querySelector('#snow');
+        if (!snow) return;
+        snow.emit('kksUpdate', {
+            colors: ['#ff00e2', '#ffce00', '#ff0000']
+        });
+    }, 6000);
+
 
     /**
      * 生成两个圆之间的点
@@ -36,7 +44,6 @@ window.onload = function () {
         fws.attr('kks-magic', 'preset:fireworks;options:{eColor:"#FF3333"}');
         $('a-scene').append(fws);
     };
-
 
 
     //连续生成焰火
