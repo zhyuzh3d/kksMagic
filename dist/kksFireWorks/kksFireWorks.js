@@ -1,5 +1,5 @@
 /**
- * v0.6.0
+ * v0.6.1
  * Licence:Using this software, you have agreed to this,every fireworks is your blessing for kk.
  * KKsMagic焰火插件预设
  */
@@ -33,7 +33,7 @@ console.info('曾经的灯塔上面\n他为她放的烟火\n倒映在江面\n—
         ctx.$kksOpt = {
             rMaxCount: 1000, //发射粒子最大数量，超过这个值的粒子被忽略
             rCount: 300, //发射器每帧每秒喷射的粒子数量，推荐50～200
-            rSpeed: 40, //发射器每秒向上飞行的速度，推荐10~50
+            rSpeed: 50, //发射器每秒向上飞行的速度，推荐10~50
             rSpread: 0.2, //发射器粒子扩散范围，数值越大拖尾越宽，推荐0.01~0.05
             rLife: 200, //发射器粒子的最大生命值,毫秒，值越大拖尾越长，推荐100~1000
             rLifeRand: 100, //发射器粒子生命值的随机值，下同，推荐参照rLife设置

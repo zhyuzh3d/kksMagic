@@ -6,7 +6,7 @@ window.onload = function () {
         snow.emit('kksUpdate', {
             colors: ['#00FF00', '#0000FF']
         });
-    }, 2000);
+    }, 3000);
 
     setTimeout(function () {
         var snow = document.querySelector('#snow');
@@ -14,7 +14,15 @@ window.onload = function () {
         snow.emit('kksUpdate', {
             colors: ['#ff00e2', '#ffce00', '#ff0000']
         });
-    }, 4000);
+    }, 6000);
+
+    setTimeout(function () {
+        var snow = document.querySelector('#snow');
+        if (!snow) return;
+        snow.emit('kksUpdate', {
+            colors: ['#fffffff']
+        });
+    }, 12000);
 
 
     /**
@@ -41,7 +49,7 @@ window.onload = function () {
     function genFireWork(pos) {
         var fws = $('<a-entity></a-entity>');
         fws.attr('position', pos.x + ' ' + pos.y + ' ' + pos.z);
-        fws.attr('kks-magic', 'preset:fireworks;options:{eColor:"#FF3333"}');
+        fws.attr('kks-magic', 'preset:fireworks;options:{eColors:["#FF3333","#ffef33","#33ff99","#33b1ff","#4b33ff","#ff33f7"],eCount:8,}');
         $('a-scene').append(fws);
     };
 
@@ -49,7 +57,7 @@ window.onload = function () {
     //连续生成焰火
     setInterval(function () {
         var pos = genCirclePoint(50, 70, 0);
-        //genFireWork(pos);
+        genFireWork(pos);
     }, 1000)
 
 
