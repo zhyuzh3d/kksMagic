@@ -1,12 +1,26 @@
 <head>
-  <title>My A-Frame Scene</title>
-  <script src="https://aframe.io/releases/0.3.0/aframe.min.js"></script>
-  <script src="https://rawgit.com/flysonic10/aframe-passthrough/master/dist/aframe-passthrough-component.min.js"></script>
+    <title>My A-Frame Scene</title>
+    <script src="../dist/lib/jquery.min.js"></script>
+    <script src="../dist/lib/aframe.min.js"></script>
 </head>
 
 <body>
-  <a-scene>
-    <a-assets></a-assets>
-    <a-passthrough width="16" height="9"></a-passthrough>
-  </a-scene>
+    <!--a-scene>
+        <a-assets>
+            <video id='vv'></video>
+        </a-assets>
+    </a-scene-->
+    <video id='vv' width="200px" height="200px"></video>
+
+    <script>
+        var video = document.getElementById("vv");
+        navigator.getUserMedia({
+            video: true
+        }, function(stream) {
+            video.src = window.webkitURL.createObjectURL(stream);
+        }, function(error) {
+            console.log(error);
+        });
+
+    </script>
 </body>
