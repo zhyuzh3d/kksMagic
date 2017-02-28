@@ -1,26 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>My A-Frame Scene</title>
-    <script src="../dist/lib/jquery.min.js"></script>
-    <script src="../dist/lib/aframe.min.js"></script>
-</head>
+    <meta charset="UTF-8">
+    <title>HTML5调用电脑摄像头实例</title>
+    <script type="text/javascript">
+        window.addEventListener("DOMContentLoaded", function() {
+            // Grab elements, create settings, etc.
+            var canvas = document.getElementById("canvas"),
+                context = canvas.getContext("2d"),
+                video = document.getElementById("video"),
+                videoObj = { "video": true },
+                errBack = function(error) {
+                    console.log("Video capture error: ", error.code);
+                };
 
-<body>
-    <!--a-scene>
-        <a-assets>
-            <video id='vv'></video>
-        </a-assets>
-    </a-scene-->
-    <video id='vv' width="200px" height="200px"></video>
+            // Put video listeners into place
+            if(navigator.getUserMedia) { // Standard
+                //alert("支持navigator.getUserMedia");
+                navigator.getUserMedia(videoObj, function(stream) {
+                    video.src = stream;
+                    video.play();
+                }, errBack);
+            } else if(navigator.webkitGetUserMedia) { // WebKit-prefixed
+                //alert("支持navigator.webkitGetUserMedia");
+                navigator.webkitGetUserMedia(videoObj, function(stream){
+                    video.src = window.webkitURL.createObjectURL(stream);
+                    video.play();
+                }, errBack);
+            }
+            else if(navigator.mozGetUserMedia) { // Firefox-prefixed
+                //alert("支持navigator.mozGetUserMedia");
+                navigator.mozGetUserMedia(videoObj, function(stream){
+                    video.src = window.URL.createObjectURL(stream);
+                    video.play();
+                }, errBack);
+            }
+            // 触发拍照动作
+            document.getElementById("snap").addEventListener("click", function() {
+                context.drawImage(video, 0, 0, 640, 480);
+            });
 
-    <script>
-        var video = document.getElementById("vv");
-        navigator.getUserMedia({
-            video: true
-        }, function(stream) {
-            video.src = window.webkitURL.createObjectURL(stream);
-        }, function(error) {
-            console.log(error);
-        });
-
+        }, false);
     </script>
+</head>
+<body>
+    <video id="video" width="640" height="480" autoplay></video><br>
+    <button id="snap" >点击拍照</button>  <br>
+    <canvas id="canvas" width="640" height="480"></canvas>
 </body>
+</html>
