@@ -1,4 +1,4 @@
-# kksMagic v0.12.10 
+# kksMagic v0.12.12 
 ###kksFireWork 0.5.2 / kksSnow 0.2.0
 
 ![kksMagic_sn&fw_170226b.gif](https://zhyuzh3d.github.io/kksMagic/showReels/kksMagic_sn&fw_170226b.gif)

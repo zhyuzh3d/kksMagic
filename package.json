@@ -1,6 +1,6 @@
 {
     "name": "kks-magic",
-    "version": "0.15.11",
+    "version": "0.15.12",
     "description": "a-frame particles entity plugin.",
     "main": "./dist/kksMagic/kksMagic.js",
     "scripts": {
@@ -14,7 +14,9 @@
     "a-frame",
     "aframe",
     "threejs",
-    "particle"
+    "particle",
+    "firework",
+    "snow",
   ],
     "author": "zhyuzh",
     "license": "MIT",

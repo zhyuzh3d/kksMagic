@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html style="height:100%;width:100%;overflow:hidden">
+
+<head>
+    <title>代码派！</title>
+    <meta charset="utf-8" />
+</head>
+
+<body>
+    <canvas id="cv" height="120px"></canvas>
+    <vide id='vv'></vide>
+    <script>
+        //必须初始化才能弹出提示，否则下面的MediaStreamTrack.getSources未定义
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+        window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
+
+        if (MediaStreamTrack.getSources) {
+            alert('支持！')
+        } else {
+            alert('NO！！')
+        }
+
+    </script>
+
+</body>
+
+</html>
