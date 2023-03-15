@@ -1,22 +1,22 @@
 /**
  * <a-entity kks-magic='preset:_default,options:{color:"#E91E61"}'></a-entity>
- * 最基本的aframe粒子系统注册kks-magic组件
- * 生成全局KKsMagic对象
- * 可以使用KKsMagic.addPreset(name preset)方法添加新的预设，然后再使用
- * preset格式{init,tick,update}三个函数
- * preset.init函数必须返回一个THREE.Points对象
- * 在函数中this指向el，比如this.$kksMagic.geometry指向threejs对象
- * preset.tick函数通过修改ctx.$kksMagic.geometry.vertices数组所有点实现动画效果
- * 在函数中可以访问this.data.options对象访问用户entity中设定的参数，注意parse处理
- * 默认_default预设为400立方范围内降落的方形白色粒子
- */
+ * The most basic aframe particle system registration kks-magic component
+ * Generate global KKsMagic objects
+ * You can use KKsMagic.The addPreset (name preset) method adds a new preset, and then uses it again
+ * Three functions in preset format {init, tick, update}
+ * preset.The init function must return a THREE.Points object
+ * In the function this points to el, such as this.$kksMagic.Geometry points to the threejs object
+ * preset.The tick function modifies ctx.$kksMagic.geometry.All points in the vertebra array achieve animation effects
+ * This can be accessed in the function.data.The options object accesses the parameters set in the user entity, pay attention to the parse processing
+ * Default _default preset is square white particles landing within 400 cubic meters
+*/
 
 (function () {
     window.KKsMagic = {
         /**
-         * 添加一个新的预设模版
-         * @param {string} name   预设模版的名称
-         * @param {object} preset {init,tick,update}三个函数
+         * Add a new preset template
+         * @param {string} name   The name of the preset template
+         * @param {object} preset {init,tick,update} Three functions
          */
         addPreset: function (name, preset) {
             if (this.presets[name]) {
@@ -29,7 +29,7 @@
         presets: {},
     };
 
-    //-------------注册组件--------------
+    //-------------Register components--------------
     AFRAME.registerComponent('kks-magic', {
         schema: {
             preset: {
@@ -72,11 +72,11 @@
 
             if (points) {
                 if (points.constructor != THREE.Points && points.constructor != THREE.Group) {
-                    points = new THREE.Points(new THREE.Geometry(), new THREE.PointsMaterial());
+                    points = new THREE.Points(new THREE.BufferGeometry(), new THREE.PointsMaterial());
                     console.warn('KKsMagic:init:not return a THREE.Points/THREE.Group object:', ctx.data.preset, ',use a default THREE.Points.');
                 };
             } else {
-                points = new THREE.Points(new THREE.Geometry(), new THREE.PointsMaterial());
+                points = new THREE.Points(new THREE.BufferGeometry(), new THREE.PointsMaterial());
                 console.warn('KKsMagic:init:not return a object:', ctx.data.preset, ',use a default THREE.Points..');
             };
 
@@ -120,7 +120,7 @@
     });
 
 
-    //--------------添加默认default预设-----------------
+    //--------------Add default preset-----------------
 
     KKsMagic.addPreset('_default', {
         init: defaultInit,
@@ -131,15 +131,15 @@
     });
 
     /**
-     * 默认的初始化粒子函数,
-     * 400立方的范围随机生成粒子
-     * 读取默认图片材质
+     * Default initialization particle function,
+     * Randomly generate particles in a range of 400 cubic meters
+     * Read the default image material
      * @returns {object} THREE.Points
      */
     function defaultInit() {
         var ctx = this;
         var count = 100;
-        var geo = new THREE.Geometry();
+        var geo = new THREE.BufferGeometry();
 
         for (var p = 0; p < count; p++) {
             var x = Math.random() * 400 - 200;
@@ -162,7 +162,7 @@
     };
 
     /**
-     * 默认每次tick的函数,自动下落，落到最低返回顶部
+     * By default, every time the tick function is used, it will automatically fall, fall to the lowest and return to the top
      */
     function defaultTick() {
         var ctx = this;
@@ -181,10 +181,3 @@
     };
 
 })();
-
-
-
-
-
-
-//

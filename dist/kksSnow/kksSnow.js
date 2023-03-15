@@ -1,16 +1,16 @@
 /**
  * v0.3.0
- * KKsMagic飘雪预设
- * 随机舞动dance效果需要SimplexNoise和polyfill/typedarray支持
+ * KKsMagic Floating snow preset
+ * Random dance support Effect required SimplexNoise and polyfill/typedarray support
  */
 
 (function () {
-    //获取预设所在路径
+    //Get the preset path
     var js = document.scripts;
     js = js[js.length - 1];
     var path = js.src.substring(0, js.src.lastIndexOf("/") + 1);
 
-    //注册预设
+    //Register preset
     KKsMagic.addPreset('snow', {
         init: init,
         tick: tick,
@@ -20,32 +20,32 @@
 
 
     var kksOpt = {
-        maxCount: 2000, //最大雪花数量，超过这个数量的雪花会被忽略
-        count: 20, //每秒产生雪花数量，推荐60～100
-        size: 1, //雪花大小，不推荐修改
-        pos: '0 -30 0', //飘雪范围的中心，不推荐修改;低于y值雪花消失
-        box: '100 10 100', //生成雪花的盒子，相对于pos，范围越大需要生成越多的雪花
-        boxHeight: 90, //雪花盒子的距离地面的高度
-        speed: 10, //每秒向下移动数值，推荐5～20
-        acc: 5, //加速度，每秒变化量,生成时生效，推荐小于speed；这个值同时轻微影响dance效果
-        accRand: 2, //加速度随机变化值，生成时生效，推荐与acc相加小于speed；
-        dance: 7, //每秒飘舞幅度，值越大水平方向飘动越严重，即时生效，推荐2～10
-        color: '#FFFFFF', //雪花的颜色，不推荐修改
-        colors: undefined, //随机颜色，数组，将覆盖color选项。不推荐使用
-        opacity: 0.66, //雪花透明度，推荐0.1～1
-        textrue: path + "imgs/dot-64.png", //雪花的形状图片，不推荐修改
+        maxCount: 2000, //The maximum number of snowflakes, snowflakes that exceed this number will be ignored
+        count: 20, //The number of snowflakes generated per second is recommended from 60 to 100
+        size: 1, //Snowflake size, modification is not recommended
+        pos: '0 -30 0', //The center of the floating snow range, modification is not recommended; snowflakes below the y value disappear
+        box: '100 10 100', //The box that generates snowflakes, relative to the pos, the larger the range, the more snowflakes need to be generated.
+        boxHeight: 90, //The height of the snowflake box from the ground
+        speed: 10, //Move the value down every second, 5~20 is recommended
+        acc: 5, //Acceleration, the amount of change per second, takes effect when generated, it is recommended to be less than speed; this value also slightly affects the dance effect
+        accRand: 2, //The acceleration changes randomly, and it will take effect when it is generated. It is recommended that the sum of acc and acc is less than speed.；
+        dance: 7, //The amplitude of fluttering per second, the greater the value, the more serious the fluttering in the square direction of the water, and it will take effect immediately. It is recommended that 2~10
+        color: '#FFFFFF', //The color of snowflakes is not recommended to modify
+        colors: undefined, //Random colors, an array, will overwrite the color option.Not recommended
+        opacity: 0.66, //Snowflake transparency, recommended 0.1～1
+        textrue: path + "imgs/dot-64.png", //The shape picture of the snowflake is not recommended to modify
     };
 
     /**
-     * 默认的初始化粒子函数,
-     * 400立方的范围随机生成粒子
-     * 读取默认图片材质
+     * Default initialization particle function,
+     * Randomly generate particles in a range of 400 cubic meters
+     * Read the default image material
      * @returns {object} THREE.Points
      */
     function init() {
         var ctx = this;
 
-        //生成基本数据
+        //Generate basic data
         ctx.$kksData = {
             time: 0,
             points: [],
@@ -54,12 +54,12 @@
 
         genOpt.call(ctx);
 
-        //生成Object3D对象
-        ctx.$kksSnow = new THREE.Points(new THREE.Geometry(), ctx.$kksData.mat);
+        //Generate Object3D objects
+        ctx.$kksSnow = new THREE.Points(new THREE.BufferGeometry(), ctx.$kksData.mat);
         var kksMagic = new THREE.Group();
         kksMagic.add(ctx.$kksSnow);
 
-        //添加更新监听
+        //Add update monitor
         ctx.el.addEventListener('kksUpdate', function (evt) {
             ctx.data.options = evt.detail || {};
             genOpt.call(ctx);
@@ -71,7 +71,7 @@
 
 
     /**
-     * 默认每次tick的函数,自动下落，落到最低返回顶部
+     * By default, every time the tick function is used, it will automatically fall, fall to the lowest and return to the top
      */
     function tick() {
         var ctx = this;
@@ -86,28 +86,28 @@
     //---------------functions--------------
 
     /**
-     * 动态生成设置选项
+     * Dynamic generation setting options
      */
     function genOpt() {
         var ctx = this;
         ctx.$kksOpt = kksOpt;
 
-        //合并用户设置，整理数据，以及数量限定
+        //Merge user settings, organize data, and limit quantity
         ctx.$kksOpt = Object.assign(ctx.$kksOpt, ctx.data.options);
 
-        //整理数据
+        //Organize data
         if (ctx.$kksOpt.pos.constructor == String) {
             var posArr = ctx.$kksOpt.pos.split(' ');
             ctx.$kksOpt.pos = new THREE.Vector3(Number(posArr[0]), Number(posArr[1]), Number(posArr[2]));
         };
 
-        //整理数据
+        //Organize data
         if (ctx.$kksOpt.box.constructor == String) {
             var boxArr = ctx.$kksOpt.box.split(' ');
             ctx.$kksOpt.box = new THREE.Vector3(Number(boxArr[0]), Number(boxArr[1]), Number(boxArr[2]));
         };
 
-        //生成材质
+        //Generate material
         var mat = new THREE.PointsMaterial({
             size: ctx.$kksOpt.size,
             map: new THREE.TextureLoader().load(ctx.$kksOpt.textrue),
@@ -117,7 +117,7 @@
             depthTest: false,
         });
 
-        //处理随机颜色
+        //Handle random colors
         if (ctx.$kksOpt.colors) {
             var carr = [];
             ctx.$kksOpt.colors.forEach(function (clr) {
@@ -134,7 +134,7 @@
 
 
     /**
-     * 生成雪花,将新的雪花points添加到points队列
+     * Generate snowflakes and add new snowflake points to the points queue
      */
     function genSnow(deltaTime) {
         var ctx = this;
@@ -154,7 +154,7 @@
 
             p.acc = genRandomV3().multiplyScalar((kksOpt.acc + Math.random() * kksOpt.accRand));
 
-            //为了避免动态调整找不到clr，无论是否开启colors都指定clr参数
+            //In order to avoid the clr cannot be found for dynamic adjustment, specify the clr parameter regardless of whether colors is turned on or not
             if (kksOpt.colors) {
                 var clr = kksOpt.colors[Math.floor(Math.random() * kksOpt.colors.length)];
                 p.clr = clr;
@@ -168,7 +168,7 @@
     };
 
     /**
-     * 每帧都重新计算雪花的位置，生成新的物体
+     * Recalculate the position of the snowflake in each frame to generate a new object
      */
     var danceGen = SimplexNoise ? new SimplexNoise() : undefined;
 
@@ -184,7 +184,7 @@
         var varr = [];
         var carr = [];
 
-        //使用最新的雪花，超过数量限制的忽略掉
+        //Use the latest snowflakes, ignore those that exceed the quantity limit
         var offset = kksData.points.length < ctx.$kksOpt.maxCount ? 0 : kksData.points.length - ctx.$kksOpt.maxCount;
 
         for (var i = offset; i < kksData.points.length; i++) {
@@ -210,18 +210,37 @@
         };
         kksData.points = parr;
 
-        //刷新粒子物体
-        var newGeo = new THREE.Geometry();
+        //Refresh particle objects
+        var newGeo = new THREE.BufferGeometry();
+        let positions = [];
+
+        for(let i=0; i<parr.length;i++) {
+            positions.push(parr[i].pos.x);
+            positions.push(parr[i].pos.y);
+            positions.push(parr[i].pos.z);
+        }
+
+        const vertices = new Float32Array(positions);
+        let color = new THREE.Color(); // default to white
+        if(!isNaN(parr[0].clr.r) && !isNaN(parr[0].clr.g) && !isNaN(parr[0].clr.b)) {
+            color = new THREE.Color( parr[0].clr.r, parr[0].clr.g, parr[0].clr.b );
+        }
+
         newGeo.vertices = varr;
-        if (kksOpt.colors || kksOpt.colors) newGeo.colors = carr;
+        //if (kksOpt.colors || kksOpt.colors) newGeo.colors = carr;
+        newGeo.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+        const material = new THREE.MeshBasicMaterial( { color: color } );
+        const mesh = new THREE.Mesh( newGeo, material );
 
         ctx.$kksSnow.geometry = newGeo;
     };
 
+    
+
 
     //--------------ext function-------
     /**
-     * 生成随机数字,正负值,-1到+1
+     * Generate random numbers, positive and negative values, -1 to +1
      * @returns {number} res
      */
     function genRandom() {
@@ -233,7 +252,7 @@
     };
 
     /**
-     * 生成随机Vector3，正负值,-1到1
+     * Generate random Vector3, positive and negative values, -1 to 1
      * @returns {number} res
      */
     function genRandomV3(base) {
